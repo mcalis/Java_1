@@ -88,6 +88,7 @@ public class Controller{
 
     }
     //spremanje podatak evidencija kad kliknemo gumb
+    //github
 
     public void pressButton(ActionEvent event){
         if(brdane.getText() != null && brmjesece.getText() != null && bropise.getText() != null){
