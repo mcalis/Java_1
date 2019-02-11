@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
@@ -8,12 +10,13 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<GridPane alignment="CENTER" hgap="10.0" prefHeight="800.0" prefWidth="1100.0" vgap="10.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+<GridPane alignment="CENTER" hgap="10.0" prefHeight="800.0" prefWidth="1100.0" vgap="10.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="sample.Controller">
   <children>
     <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" GridPane.columnIndex="0" GridPane.rowIndex="0">
       <tabs>
@@ -23,11 +26,11 @@
               <children>
                 <TableView fx:id="tableprijevoz" layoutX="10.0" layoutY="195.0" prefHeight="440.0" prefWidth="1076.0">
                   <columns>
-                    <TableColumn fx:id="Datum" maxWidth="5000.0" minWidth="10.0" prefWidth="100.0" text="Datum" />
-                    <TableColumn fx:id="kmd" maxWidth="5000.0" minWidth="10.0" prefWidth="335.0" text="Broj prijeđenih kilometara pri dolasku" />
-                    <TableColumn fx:id="kmo1" maxWidth="5000.0" minWidth="10.0" prefWidth="328.0" text="Broj prijeđenih kilometara pri odlasku" />
-                    <TableColumn fx:id="prijev" maxWidth="5000.0" minWidth="0.0" prefWidth="198.0" text="Prijevozno sredstvo" />
-                    <TableColumn fx:id="pot" maxWidth="5000.0" minWidth="10.0" prefWidth="124.0" text="Potpis" />
+                    <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="100.0" text="Datum" fx:id="DatumP" />
+                    <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="335.0" text="Broj prijeđenih kilometara pri dolasku" fx:id="kmd" />
+                    <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="328.0" text="Broj prijeđenih kilometara pri odlasku" fx:id="kmo1" />
+                    <TableColumn maxWidth="5000.0" minWidth="0.0" prefWidth="198.0" text="Prijevozno sredstvo" fx:id="prijev" />
+                    <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="124.0" text="Potpis" fx:id="pot" />
                   </columns>
                 </TableView>
                 <ScrollPane layoutX="38.0" layoutY="14.0" prefHeight="174.0" prefWidth="1036.0">
@@ -64,38 +67,38 @@
               <children>
                 <TableView layoutX="50.0" layoutY="66.0" prefHeight="103.0" prefWidth="1000.0">
                   <columns>
-                    <TableColumn fx:id="imeprezimeevidencija" maxWidth="5000.0" minWidth="10.0" prefWidth="114.0" text="Ime Prezime" />
-                    <TableColumn fx:id="e1" maxWidth="5000.0" minWidth="10.0" prefWidth="25.0" text="1" />
-                    <TableColumn fx:id="e2" maxWidth="5000.0" minWidth="10.0" prefWidth="25.0" text="2" />
-                    <TableColumn fx:id="e3" maxWidth="5000.0" minWidth="10.0" prefWidth="25.0" text="3" />
-                    <TableColumn fx:id="e4" maxWidth="5000.0" minWidth="10.0" prefWidth="25.0" text="4" />
-                    <TableColumn fx:id="e5" maxWidth="5000.0" minWidth="10.0" prefWidth="25.0" text="5" />
-                    <TableColumn fx:id="e6" maxWidth="5000.0" minWidth="10.0" prefWidth="25.0" text="6" />
-                    <TableColumn fx:id="e7" maxWidth="5000.0" minWidth="10.0" prefWidth="25.0" text="7" />
-                    <TableColumn fx:id="e8" maxWidth="5000.0" minWidth="10.0" prefWidth="25.0" text="8" />
-                    <TableColumn fx:id="e9" prefWidth="25.0" text="9" />
-                    <TableColumn fx:id="e10" maxWidth="5000.0" minWidth="10.0" prefWidth="30.0" text="10" />
-                    <TableColumn fx:id="e11" prefWidth="30.0" text="11" />
-                    <TableColumn fx:id="e12" prefWidth="30.0" text="12" />
-                    <TableColumn fx:id="e13" prefWidth="30.0" text="13" />
-                    <TableColumn fx:id="e14" prefWidth="30.0" text="14" />
-                    <TableColumn fx:id="e15" prefWidth="30.0" text="15" />
-                    <TableColumn fx:id="e16" prefWidth="30.0" text="16" />
-                    <TableColumn fx:id="e17" prefWidth="30.0" text="17" />
-                    <TableColumn fx:id="e18" prefWidth="30.0" text="18" />
-                    <TableColumn fx:id="e19" prefWidth="30.0" text="19" />
-                    <TableColumn fx:id="e20" prefWidth="30.0" text="20" />
-                    <TableColumn fx:id="e21" prefWidth="30.0" text="21" />
-                    <TableColumn fx:id="e22" prefWidth="30.0" text="22" />
-                    <TableColumn fx:id="e23" prefWidth="30.0" text="23" />
-                    <TableColumn fx:id="e24" maxWidth="5000.0" minWidth="10.0" prefWidth="30.0" text="24" />
-                    <TableColumn fx:id="e25" prefWidth="30.0" text="25" />
-                    <TableColumn fx:id="e26" prefWidth="30.0" text="26" />
-                    <TableColumn fx:id="e27" maxWidth="5000.0" minWidth="10.0" prefWidth="30.0" text="27" />
-                    <TableColumn fx:id="e28" prefWidth="30.0" text="28" />
-                    <TableColumn fx:id="e29" prefWidth="30.0" text="29" />
-                    <TableColumn fx:id="e30" maxWidth="5000.0" minWidth="10.0" prefWidth="30.0" text="30" />
-                    <TableColumn fx:id="e31" maxWidth="5000.0" minWidth="10.0" prefWidth="30.0" text="31" />
+                    <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="114.0" text="Ime Prezime" fx:id="imeprezimeevidencija" />
+                    <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="25.0" text="1" fx:id="e1" />
+                    <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="25.0" text="2" fx:id="e2" />
+                    <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="25.0" text="3" fx:id="e3" />
+                    <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="25.0" text="4" fx:id="e4" />
+                    <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="25.0" text="5" fx:id="e5" />
+                    <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="25.0" text="6" fx:id="e6" />
+                    <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="25.0" text="7" fx:id="e7" />
+                    <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="25.0" text="8" fx:id="e8" />
+                    <TableColumn prefWidth="25.0" text="9" fx:id="e9" />
+                    <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="30.0" text="10" fx:id="e10" />
+                    <TableColumn prefWidth="30.0" text="11" fx:id="e11" />
+                    <TableColumn prefWidth="30.0" text="12" fx:id="e12" />
+                    <TableColumn prefWidth="30.0" text="13" fx:id="e13" />
+                    <TableColumn prefWidth="30.0" text="14" fx:id="e14" />
+                    <TableColumn prefWidth="30.0" text="15" fx:id="e15" />
+                    <TableColumn prefWidth="30.0" text="16" fx:id="e16" />
+                    <TableColumn prefWidth="30.0" text="17" fx:id="e17" />
+                    <TableColumn prefWidth="30.0" text="18" fx:id="e18" />
+                    <TableColumn prefWidth="30.0" text="19" fx:id="e19" />
+                    <TableColumn prefWidth="30.0" text="20" fx:id="e20" />
+                    <TableColumn prefWidth="30.0" text="21" fx:id="e21" />
+                    <TableColumn prefWidth="30.0" text="22" fx:id="e22" />
+                    <TableColumn prefWidth="30.0" text="23" fx:id="e23" />
+                    <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="30.0" text="24" fx:id="e24" />
+                    <TableColumn prefWidth="30.0" text="25" fx:id="e25" />
+                    <TableColumn prefWidth="30.0" text="26" fx:id="e26" />
+                    <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="30.0" text="27" fx:id="e27" />
+                    <TableColumn prefWidth="30.0" text="28" fx:id="e28" />
+                    <TableColumn prefWidth="30.0" text="29" fx:id="e29" />
+                    <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="30.0" text="30" fx:id="e30" />
+                    <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="30.0" text="31" fx:id="e31" />
                   </columns>
                 </TableView>
                 <Label layoutX="68.0" layoutY="25.0" text="POMOĆNA EVIDENCIJA DOLAZAKA NA POSAO          Fakultet informatike u Puli" />

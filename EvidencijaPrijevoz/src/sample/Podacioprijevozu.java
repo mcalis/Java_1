@@ -15,22 +15,11 @@ public class Podacioprijevozu {
         this.potpis= new String("");
     }
 
+    public String getDatum() { return Datum; }
     public String getBrojkmd() {
         return Brojkmd;
     }
-
-    public String getBrojkmodlazak() {
-        return brojkmodlazak;
-    }
-
-    public String getDatum() {
-        return Datum;
-    }
-
-    public String getPrijevoz() {
-        return prijevoz;
-    }
-    public String getPotpis(){
-        return potpis;
-    }
+    public String getBrojkmodlazak() { return brojkmodlazak; }
+    public String getPrijevoz() { return prijevoz; }
+    public String getPotpis(){ return potpis; }
 }

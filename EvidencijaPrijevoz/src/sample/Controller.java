@@ -19,11 +19,11 @@ import javafx.fxml.JavaFXBuilderFactory;
 public class Controller{
     //za prijevoz
     //tablica
-    FXMLLoader loader = new FXMLLoader(Controller.class.getResource("C:\\Users\\David\\IdeaProjects\\EvidencijaPrijevoz\\src\\sample\\sample.fxml"));
+    FXMLLoader loader = new FXMLLoader(Controller.class.getResource("C:\\Users\\David\\Desktop\\EvidencijaPrijevoz\\src\\sample\\sample.fxml"));
     @FXML
     TableView<Podacioprijevozu> tableprijevoz;
     @FXML
-    TableColumn<Podacioprijevozu, String> Datum;
+    TableColumn<Podacioprijevozu, String> DatumP;
     @FXML
      TableColumn <Podacioprijevozu, String> kmd;
     @FXML
@@ -56,39 +56,43 @@ public class Controller{
     TextField bropise;
     @FXML
     Button unosevidencija;
-    ObservableList<Podacioprijevozu> characters = FXCollections.observableArrayList();
     private ObservableList<Podacioprijevozu> getCharacters(){
-
-
+        ObservableList<Podacioprijevozu> characters = FXCollections.observableArrayList();
+        characters.add(new Podacioprijevozu(DatumPrijevoz.getText(),  KMdolazakPrijevoz.getText(),  KmodlazakPrijevoz.getText(),  SredstvoPrijevoz.getText()));
         return characters;
     }
-    //spremanje podataka prijevoza
+    //spremanje špodataka prijevoza
 
     public  void spremanjeprijevoza(){
-      //  Podacioprijevozu PP= new Podacioprijevozu(DatumPrijevoz.getText(),  KMdolazakPrijevoz.getText(),  KmodlazakPrijevoz.getText(),  SredstvoPrijevoz.getText());
-        characters.add(new Podacioprijevozu(DatumPrijevoz.getText(),  KMdolazakPrijevoz.getText(),  KmodlazakPrijevoz.getText(),  SredstvoPrijevoz.getText()));
+        Podacioprijevozu PP= new Podacioprijevozu(DatumPrijevoz.getText(),  KMdolazakPrijevoz.getText(),  KmodlazakPrijevoz.getText(),  SredstvoPrijevoz.getText());
 
-        tableprijevoz.setItems(getCharacters());
+
+
         //primjer postavljanje podataka u tablicu
-        Datum.setCellValueFactory(
-                new PropertyValueFactory<>("Datum1")
+        DatumP.setCellValueFactory(
+                new PropertyValueFactory<>("Datum")
         );
         kmd.setCellValueFactory(
-                new PropertyValueFactory<>("Brojkmd1")
+                new PropertyValueFactory<>("Brojkmd")
         );
         kmo1.setCellValueFactory(
-                new PropertyValueFactory<>("brojkmodlazak1")
+                new PropertyValueFactory<>("brojkmodlazak")
         );
         prijev.setCellValueFactory(
-                new PropertyValueFactory<>("prijevoz1")
+                new PropertyValueFactory<>("prijevoz")
         );
         pot.setCellValueFactory(
                 new PropertyValueFactory<>("potpis")
         );
 
+        tableprijevoz.getItems().add(PP);
+
+
+
     }
+
+
     //spremanje podatak evidencija kad kliknemo gumb
-    //github
 
     public void pressButton(ActionEvent event){
         if(brdane.getText() != null && brmjesece.getText() != null && bropise.getText() != null){
