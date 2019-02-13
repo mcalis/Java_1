@@ -8,7 +8,7 @@ public class Podacioprijevozu {
     public final String potpis;
 
     Podacioprijevozu(String Datum1, String Brojkmd1, String brojkmodlazak1, String prijevoz1){
-        this.Datum = new String(Brojkmd1);
+        this.Datum = new String(Datum1);
         this.Brojkmd = new String(Brojkmd1);
         this.brojkmodlazak = new String(brojkmodlazak1);
         this.prijevoz = new String(prijevoz1);
