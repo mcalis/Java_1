@@ -1,5 +1,6 @@
 package sample;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -10,6 +11,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Callback;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 
 public class Controller{
@@ -227,9 +229,28 @@ public class Controller{
            textFieldKMdolazakPrijevoz.clear();
            textFieldKModlazakPrijevoz.clear();
            textFieldSredstvoPrijevoz.clear();
+
+           // linije odavde pa do kraja metode su za prikaz poruke nakon dodanog putovanja, poruka samonestaje nakon 1.5 sec
+           Alert alert = new Alert(Alert.AlertType.INFORMATION);
+           alert.setTitle("Putovanje");
+           alert.setHeaderText("DODANO PUTOVANJE U "+datePickerDatePrijevoz.getValue().getMonthValue()+". MJESEC");
+           Thread thread = new Thread(() -> {
+               try {
+                   // Wait for 5 secs
+                   Thread.sleep(1500);
+                   if (alert.isShowing()) {
+                       Platform.runLater(() -> alert.close());
+                   }
+               } catch (Exception exp) {
+                   exp.printStackTrace();
+               }
+           });
+           thread.setDaemon(true);
+           thread.start();
+           Optional<ButtonType> result = alert.showAndWait();
        }
     }
-    // metoda koja rukuje promjenom selekcije datuma u gornjem datePickeru, za odabrani datum vraca mjesec, te za odabrani mjesec pokazuje putovanja zaposlenika
+    // metoda koja rukuje promjenom selekcije datuma u gornjem datePickeru, za odabrani datum vraca mjesec, te za odabrani mjesec pokazuje putovanja zaposlenika, ova metoda poziva se i u ostalim metodama kao refresh prikaza tablice
     @FXML
     private void datePickerFiltriranje (){
         if (textFieldImePrezimeZaposlenika.getText().equalsIgnoreCase("") || textFieldAdresaStanovanja.getText().equalsIgnoreCase("") || textFieldAdresaRada.getText().equalsIgnoreCase("") || listaZaposlenika.isEmpty()){
