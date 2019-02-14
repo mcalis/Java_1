@@ -1,30 +1,15 @@
 package sample;
 
-import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.transformation.FilteredList;
-import javafx.collections.transformation.SortedList;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.event.ActionEvent;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.MouseEvent;
-import javafx.util.StringConverter;
+import javafx.util.Callback;
 
-import javax.swing.text.Document;
-import java.io.FileOutputStream;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.Month;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Scanner;
 
 
 public class Controller{
@@ -32,6 +17,8 @@ public class Controller{
     public void initialize () {
         //Mora se unesti barem jedan zaposlenik, nakon unošenja gumb unosPutovanja postaje dostupan.
         unosPutovanja.setDisable(true);
+        // postavljanje današnjeg datuma, iz kojeg se uzima trenutni mjesec za prikaz
+        datePickerZaposlenikMjesec.setValue(LocalDate.now());
 
         //primjer postavljanje stupaca u tablicu
         DatumStupac.setCellValueFactory(
@@ -49,17 +36,33 @@ public class Controller{
         potpisStupac.setCellValueFactory(
                 new PropertyValueFactory<>("potpisStupac")
         );
-        
+
+        // ograničavanje odabira datuma do današnjeg dana
+        DatePicker maxDate = new DatePicker(); // DatePicker, used to define max date available, you can also create another for minimum date
+        maxDate.setValue(LocalDate.now()); // Max date available will be 2015-01-01
+        final Callback<DatePicker, DateCell> dayCellFactory;
+        dayCellFactory = (final DatePicker datePicker) -> new DateCell() {
+            @Override
+            public void updateItem(LocalDate item, boolean empty) {
+                super.updateItem(item, empty);
+                if (item.isAfter(maxDate.getValue())) { //Disable all dates after required date
+                    setDisable(true);
+                    setStyle("-fx-background-color: #ffc0cb;"); //To set background on different color
+                }
+            }
+        };
+        datePickerDatePrijevoz.setDayCellFactory(dayCellFactory); // ograničavanje odabira datuma do današnjeg dana
+        datePickerZaposlenikMjesec.setDayCellFactory((dayCellFactory));  // ograničavanje odabira datuma do današnjeg dana
     }
     /**
      * U listu listaZaposlenika spremaju se svi Zaposlenici
      */
     private ObservableList<Zaposlenik> listaZaposlenika = FXCollections.observableArrayList();
+    // listaPutovanjaPojedinogMjeseca sprema sva putovanja od jednog mjeseca
+    private ObservableList<Podacioprijevozu> listaPutovanjaPojedinogMjeseca = FXCollections.observableArrayList();
 
     // pomocna lista stringova za comboBox
     private ObservableList<String> listaImena = FXCollections.observableArrayList();
-
-    private ObservableList<Month> Datumi = FXCollections.observableArrayList();
 
     //za prijevoznoSredstvo
     //tablica
@@ -77,18 +80,15 @@ public class Controller{
     @FXML
     TableColumn<Podacioprijevozu, String> potpisStupac;
 
-
     //textField za unos podataka o prijevozu - podaciOPrijevozu
     @FXML
     TextField textFieldImePrezimeZaposlenika;
     @FXML
     ComboBox comboBoxZaposlenik;
     @FXML
-    ComboBox datumchoicebox;
+    DatePicker datePickerDatePrijevoz;
     @FXML
-    DatePicker DatePickerDatePrijevoz;
-    @FXML
-    DatePicker DatePickerZaposlenikMjesec;
+    DatePicker datePickerZaposlenikMjesec;
     @FXML
     TextField textFieldAdresaStanovanja;
     @FXML
@@ -149,14 +149,8 @@ public class Controller{
             buttonUnosZaposlenika.setDisable(true);
         }
     }
-
-    private void punjnjeDatumCombobxa(ActionEvent ne){
-
-
-    }
-
     /**
-     * Na promjenu selekcije Zaposlenika u comboBoxu, refresha kompletni prikaz
+     * Na promjenu selekcije Zaposlenika u comboBoxu, refresha kompletni prikaz putovanja za odabrani mjesec
      * @param event
      */
     @FXML
@@ -167,7 +161,7 @@ public class Controller{
         textFieldImePrezimeZaposlenika.setText(trazeni.getImePrezimeZaposlenika());
         textFieldAdresaRada.setText(trazeni.getAdresaRada());
         textFieldAdresaStanovanja.setText(trazeni.getAdresaStanovanja());
-        tablePrijevoz.setItems(trazeni.listaPutovanja);
+        datePickerFiltriranje();
         unosPutovanja.setDisable(false);
     }
     /**
@@ -212,12 +206,11 @@ public class Controller{
      * */
    @FXML
    private void spremanjeprijevoza(){
-       if (isInteger(textFieldKMdolazakPrijevoz.getText()) || isInteger(textFieldKModlazakPrijevoz.getText()) ||DatePickerDatePrijevoz.getValue().equals(null) ||textFieldKMdolazakPrijevoz.getText().equalsIgnoreCase("") || textFieldKModlazakPrijevoz.getText().equalsIgnoreCase("") || textFieldSredstvoPrijevoz.getText().equalsIgnoreCase("")){
+       if (isInteger(textFieldKMdolazakPrijevoz.getText()) || isInteger(textFieldKModlazakPrijevoz.getText()) || datePickerDatePrijevoz.getValue().equals(null) ||textFieldKMdolazakPrijevoz.getText().equalsIgnoreCase("") || textFieldKModlazakPrijevoz.getText().equalsIgnoreCase("") || textFieldSredstvoPrijevoz.getText().equalsIgnoreCase("")){
             upozorenje();
        }
        else{
-
-           Podacioprijevozu objektPodaciOPrijevozu = new Podacioprijevozu(DatePickerDatePrijevoz.getValue(), Integer.parseInt(textFieldKMdolazakPrijevoz.getText()), Integer.parseInt(textFieldKModlazakPrijevoz.getText()),  textFieldSredstvoPrijevoz.getText());
+           Podacioprijevozu objektPodaciOPrijevozu = new Podacioprijevozu(datePickerDatePrijevoz.getValue(), Integer.parseInt(textFieldKMdolazakPrijevoz.getText()), Integer.parseInt(textFieldKModlazakPrijevoz.getText()),  textFieldSredstvoPrijevoz.getText());
 
            // pronalazi zaposlenika u listiZaposlenika čije ime je trenutno u textFieldu
            String odabraniZaposlenikString = textFieldImePrezimeZaposlenika.getText();
@@ -227,25 +220,39 @@ public class Controller{
            // dodaje jedno putovanje za zaposlenika koji se nalazi odabran - trenutni u textFieldu
            trazeni.listaPutovanja.add(objektPodaciOPrijevozu);
 
-           // puni tablicu putovanja za odabranog zaposlenika
-           tablePrijevoz.setItems(trazeni.listaPutovanja);
-
+           // puni tablicu putovanja za odabranog zaposlenika i za odabrani mjesec
+            datePickerFiltriranje();
            // brisanje textFielda nakon unosa
-           DatePickerDatePrijevoz.getEditor().clear();
+           datePickerDatePrijevoz.getEditor().clear();
            textFieldKMdolazakPrijevoz.clear();
            textFieldKModlazakPrijevoz.clear();
            textFieldSredstvoPrijevoz.clear();
-
-           //automatsko dodavanje mjeseca u combo box nakon dodavanja u tablicu
-
-           Datumi.add(DatePickerDatePrijevoz.getValue().getMonth());
-           datumchoicebox.setItems(Datumi);
        }
+    }
+    // metoda koja rukuje promjenom selekcije datuma u gornjem datePickeru, za odabrani datum vraca mjesec, te za odabrani mjesec pokazuje putovanja zaposlenika
+    @FXML
+    private void datePickerFiltriranje (){
+        if (textFieldImePrezimeZaposlenika.getText().equalsIgnoreCase("") || textFieldAdresaStanovanja.getText().equalsIgnoreCase("") || textFieldAdresaRada.getText().equalsIgnoreCase("") || listaZaposlenika.isEmpty()){
+            upozorenje();
+        }
+        else {
+            listaPutovanjaPojedinogMjeseca.clear();
+            String odabraniZaposlenikString = textFieldImePrezimeZaposlenika.getText();
+            Zaposlenik trazeni = listaZaposlenika.stream()
+                    .filter(Zaposlenik -> odabraniZaposlenikString.equalsIgnoreCase(Zaposlenik.getImePrezimeZaposlenika())).findAny().orElse(null);
 
+            Integer mjesecBroj = datePickerZaposlenikMjesec.getValue().getMonthValue();
+            Integer godinaBroj = datePickerZaposlenikMjesec.getValue().getYear();
+
+            for (Podacioprijevozu pod: trazeni.listaPutovanja) {
+                if (pod.Datum.getMonthValue() == mjesecBroj && pod.Datum.getYear()== godinaBroj) listaPutovanjaPojedinogMjeseca.add(pod);
+            }
+            tablePrijevoz.setItems(listaPutovanjaPojedinogMjeseca);
+
+        }
     }
     /**
-     * spremanje podataka evidencija kad kliknemo gumb
-     * @param event
+     * -------------------------------   2. zadatak ---spremanje podataka evidencija kad kliknemo gumb ----------------------------------------------------------------------------------------------
      */
     @FXML
     private void pressButton(ActionEvent event){
@@ -257,7 +264,6 @@ public class Controller{
         }else{
             System.out.println("enter");
         }
-
     }
     @FXML
     public void filtriranjetablice(ActionEvent event) {
