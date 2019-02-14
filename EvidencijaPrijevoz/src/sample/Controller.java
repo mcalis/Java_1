@@ -30,17 +30,17 @@ public class Controller{
     //tablica
     FXMLLoader loader = new FXMLLoader(Controller.class.getResource("C:\\Users\\David\\Desktop\\EvidencijaPrijevoz\\src\\sample\\sample.fxml"));
     @FXML
-    TableView<podaciOPrijevozu> tablePrijevoz;
+    TableView<Podacioprijevozu> tablePrijevoz;
     @FXML
-    TableColumn<podaciOPrijevozu, String> DatumStupac;
+    TableColumn<Podacioprijevozu, String> DatumStupac;
     @FXML
-     TableColumn <podaciOPrijevozu, String> KmDolazakStupac;
+     TableColumn <Podacioprijevozu, String> KmDolazakStupac;
     @FXML
-    TableColumn<podaciOPrijevozu, String> KmOdlazakStupac;
+    TableColumn<Podacioprijevozu, String> KmOdlazakStupac;
     @FXML
-    TableColumn<podaciOPrijevozu, String> prijevozStupac;
+    TableColumn<Podacioprijevozu, String> prijevozStupac;
     @FXML
-    TableColumn<podaciOPrijevozu, String> potpisStupac;
+    TableColumn<Podacioprijevozu, String> potpisStupac;
 
     //textField za unos podataka o prijevozu - podaciOPrijevozu
     @FXML
@@ -143,7 +143,7 @@ public class Controller{
             upozorenje();
        }
        else {
-           podaciOPrijevozu objektPodaciOPrijevozu = new podaciOPrijevozu(textFieldDatumPrijevoz.getText(),  textFieldKMdolazakPrijevoz.getText(),  textFieldKModlazakPrijevoz.getText(),  textFieldSredstvoPrijevoz.getText());
+           Podacioprijevozu objektPodaciOPrijevozu = new Podacioprijevozu(textFieldDatumPrijevoz.getText(),  textFieldKMdolazakPrijevoz.getText(),  textFieldKModlazakPrijevoz.getText(),  textFieldSredstvoPrijevoz.getText());
 
            // pronalazi zaposlenika čije ime je trenutno u textFieldu
            String odabraniZaposlenikString = textFieldImePrezimeZaposlenika.getText();

@@ -12,7 +12,7 @@ public class Zaposlenik {
     /**
      *  listaPutovanja sadrži sva putovanja jednog zaposlenika
      */
-    public ObservableList<podaciOPrijevozu> listaPutovanja= FXCollections.observableArrayList();
+    public ObservableList<Podacioprijevozu> listaPutovanja= FXCollections.observableArrayList();
 
     public Zaposlenik(String imePrezimeZaposlenika, String adresaRada, String adresaStanovanja) {
         this.imePrezimeZaposlenika = imePrezimeZaposlenika;
