@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<GridPane alignment="CENTER" hgap="10.0" prefHeight="800.0" prefWidth="1100.0" vgap="10.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+<GridPane alignment="CENTER" hgap="10.0" prefHeight="800.0" prefWidth="1100.0" vgap="10.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
   <children>
     <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" GridPane.columnIndex="0" GridPane.rowIndex="0">
       <tabs>
@@ -46,20 +46,21 @@
                                     <ComboBox fx:id="comboBoxZaposlenik" layoutX="722.0" layoutY="10.0" onAction="#ComboBoxChanged" prefHeight="25.0" prefWidth="253.0" />
                                     <Button fx:id="buttonUnosZaposlenika" layoutX="641.0" layoutY="104.0" mnemonicParsing="false" onAction="#unosZaposlenikaGumb" prefHeight="25.0" prefWidth="161.0" text="Unos Novog Zaposlenika" />
                                     <Button fx:id="buttonOcistiCelijeZaposlenik" layoutX="809.0" layoutY="104.0" mnemonicParsing="false" onAction="#buttonOcistiCelijeZaposlenik" prefHeight="25.0" prefWidth="142.0" text="Očisti ćelije" />
-                                    <DatePicker fx:id="DatePickerZaposlenikMjesec" layoutX="722.0" layoutY="49.0" />
                       </children>
                     </AnchorPane>
                   </content>
                 </ScrollPane>
-                <TextField fx:id="textFieldKMdolazakPrijevoz" layoutX="198.0" layoutY="688.0" prefWidth="182.0" />
-                <TextField fx:id="textFieldKModlazakPrijevoz" layoutX="400.0" layoutY="688.0" prefWidth="209.0" />
-                <TextField fx:id="textFieldSredstvoPrijevoz" layoutX="627.0" layoutY="688.0" prefWidth="173.0" />
-                <Label layoutX="197.0" layoutY="650.0" text="Kilometri pri dolasku" />
-                <Label layoutX="38.0" layoutY="650.0" text="Datum" />
-                <Label layoutX="400.0" layoutY="650.0" text="Kilometri pri odlasku" />
-                <Label layoutX="617.0" layoutY="650.0" text="Prijevozno sredstvo" />
-                <Button fx:id="unosPutovanja" layoutX="849.0" layoutY="688.0" mnemonicParsing="false" onAction="#spremanjeprijevoza" prefHeight="25.0" prefWidth="122.0" text="Unos Putovanja" />
-                        <DatePicker fx:id="DatePickerDatePrijevoz" layoutX="26.0" layoutY="689.0" prefHeight="12.0" prefWidth="156.0" />
+                <TextField fx:id="textFieldKMdolazakPrijevoz" layoutX="198.0" layoutY="739.0" prefWidth="182.0" />
+                <TextField fx:id="textFieldKModlazakPrijevoz" layoutX="400.0" layoutY="739.0" prefWidth="209.0" />
+                <TextField fx:id="textFieldSredstvoPrijevoz" layoutX="627.0" layoutY="739.0" prefWidth="173.0" />
+                <Label layoutX="197.0" layoutY="701.0" text="Kilometri pri dolasku" />
+                <Label layoutX="38.0" layoutY="701.0" text="Datum" />
+                <Label layoutX="400.0" layoutY="701.0" text="Kilometri pri odlasku" />
+                <Label layoutX="617.0" layoutY="701.0" text="Prijevozno sredstvo" />
+                <Button fx:id="unosPutovanja" layoutX="849.0" layoutY="739.0" mnemonicParsing="false" onAction="#spremanjeprijevoza" prefHeight="25.0" prefWidth="122.0" text="Unos Putovanja" />
+                        <DatePicker fx:id="DatePickerDatePrijevoz" layoutX="26.0" layoutY="740.0" prefHeight="12.0" prefWidth="156.0" />
+                        <ComboBox fx:id="datumchoicebox" layoutX="717.0" layoutY="71.0" prefWidth="150.0" />
+                        <Button fx:id="FilterTable" layoutX="890.0" layoutY="71.0" mnemonicParsing="false" onAction="#filtriranjetablice" text="filtriraj" />
               </children>
             </AnchorPane>
           </content>

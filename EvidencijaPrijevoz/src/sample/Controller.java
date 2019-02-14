@@ -3,6 +3,8 @@ package sample;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -17,8 +19,11 @@ import java.io.FileOutputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.Month;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Scanner;
 
 
@@ -54,6 +59,8 @@ public class Controller{
     // pomocna lista stringova za comboBox
     private ObservableList<String> listaImena = FXCollections.observableArrayList();
 
+    private ObservableList<Month> Datumi = FXCollections.observableArrayList();
+
     //za prijevoznoSredstvo
     //tablica
     FXMLLoader loader = new FXMLLoader(Controller.class.getResource("C:\\Users\\David\\Desktop\\EvidencijaPrijevoz\\src\\sample\\sample.fxml"));
@@ -70,11 +77,14 @@ public class Controller{
     @FXML
     TableColumn<Podacioprijevozu, String> potpisStupac;
 
+
     //textField za unos podataka o prijevozu - podaciOPrijevozu
     @FXML
     TextField textFieldImePrezimeZaposlenika;
     @FXML
     ComboBox comboBoxZaposlenik;
+    @FXML
+    ComboBox datumchoicebox;
     @FXML
     DatePicker DatePickerDatePrijevoz;
     @FXML
@@ -139,6 +149,12 @@ public class Controller{
             buttonUnosZaposlenika.setDisable(true);
         }
     }
+
+    private void punjnjeDatumCombobxa(ActionEvent ne){
+
+
+    }
+
     /**
      * Na promjenu selekcije Zaposlenika u comboBoxu, refresha kompletni prikaz
      * @param event
@@ -219,7 +235,13 @@ public class Controller{
            textFieldKMdolazakPrijevoz.clear();
            textFieldKModlazakPrijevoz.clear();
            textFieldSredstvoPrijevoz.clear();
+
+           //automatsko dodavanje mjeseca u combo box nakon dodavanja u tablicu
+
+           Datumi.add(DatePickerDatePrijevoz.getValue().getMonth());
+           datumchoicebox.setItems(Datumi);
        }
+
     }
     /**
      * spremanje podataka evidencija kad kliknemo gumb
@@ -237,8 +259,8 @@ public class Controller{
         }
 
     }
-
-
-
-
+    @FXML
+    public void filtriranjetablice(ActionEvent event) {
+        
+    }
 }
