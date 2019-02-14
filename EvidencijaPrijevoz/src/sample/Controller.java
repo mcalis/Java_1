@@ -10,6 +10,14 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 
+import javax.swing.text.Document;
+import java.io.FileOutputStream;
+import java.time.LocalDate;
+import java.util.Date;
+import java.util.Scanner;
+
+
+
 
 public class Controller{
 
@@ -32,11 +40,11 @@ public class Controller{
     @FXML
     TableView<Podacioprijevozu> tablePrijevoz;
     @FXML
-    TableColumn<Podacioprijevozu, String> DatumStupac;
+    TableColumn<Podacioprijevozu, LocalDate> DatumStupac;
     @FXML
-     TableColumn <Podacioprijevozu, String> KmDolazakStupac;
+     TableColumn <Podacioprijevozu, Integer> KmDolazakStupac;
     @FXML
-    TableColumn<Podacioprijevozu, String> KmOdlazakStupac;
+    TableColumn<Podacioprijevozu, Integer> KmOdlazakStupac;
     @FXML
     TableColumn<Podacioprijevozu, String> prijevozStupac;
     @FXML
@@ -47,13 +55,12 @@ public class Controller{
     TextField textFieldImePrezimeZaposlenika;
     @FXML
     ComboBox comboBoxZaposlenik;
-
+    @FXML
+    DatePicker DatePickerDatePrijevoz;
     @FXML
     TextField textFieldAdresaStanovanja;
     @FXML
     TextField textFieldAdresaRada;
-    @FXML
-    TextField textFieldDatumPrijevoz;
     @FXML
     TextField textFieldKMdolazakPrijevoz;
     @FXML
@@ -134,16 +141,46 @@ public class Controller{
         });
     }
 
+    //provjera dali je unesen String u Text Field moguće promjeniti u Intiger
+
+    public boolean isInteger(String str) {
+
+        if (str == null) {
+            return true;
+        }
+        if (str.isEmpty()) {
+            return true;
+        }
+        int i = 0;
+        if (str.charAt(0) == '-') {
+            if (str.length() == 1) {
+                return true;
+            }
+            i = 1;
+        }
+        for (; i < str.length(); i++) {
+            char c = str.charAt(i);
+            if (c < '0' || c > '9') {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+
     /**
      * spremanje podataka o jednom putovanju kad se klikne gumb Unesi
      * */
+
    @FXML
    private void spremanjeprijevoza(){
-       if (textFieldDatumPrijevoz.getText().equalsIgnoreCase("") || textFieldKMdolazakPrijevoz.getText().equalsIgnoreCase("") || textFieldKModlazakPrijevoz.getText().equalsIgnoreCase("") || textFieldSredstvoPrijevoz.getText().equalsIgnoreCase("")){
+       if (isInteger(textFieldKMdolazakPrijevoz.getText()) || isInteger(textFieldKModlazakPrijevoz.getText()) ||DatePickerDatePrijevoz.getValue().equals(null) ||textFieldKMdolazakPrijevoz.getText().equalsIgnoreCase("") || textFieldKModlazakPrijevoz.getText().equalsIgnoreCase("") || textFieldSredstvoPrijevoz.getText().equalsIgnoreCase("")){
             upozorenje();
        }
-       else {
-           Podacioprijevozu objektPodaciOPrijevozu = new Podacioprijevozu(textFieldDatumPrijevoz.getText(),  textFieldKMdolazakPrijevoz.getText(),  textFieldKModlazakPrijevoz.getText(),  textFieldSredstvoPrijevoz.getText());
+       else{
+
+           Podacioprijevozu objektPodaciOPrijevozu = new Podacioprijevozu(DatePickerDatePrijevoz.getValue(), Integer.parseInt(textFieldKMdolazakPrijevoz.getText()), Integer.parseInt(textFieldKModlazakPrijevoz.getText()),  textFieldSredstvoPrijevoz.getText());
 
            // pronalazi zaposlenika čije ime je trenutno u textFieldu
            String odabraniZaposlenikString = textFieldImePrezimeZaposlenika.getText();
@@ -175,7 +212,7 @@ public class Controller{
            tablePrijevoz.setItems(trazeni.listaPutovanja);
 
            // brisanje textFielda nakon unosa
-           textFieldDatumPrijevoz.clear();
+           DatePickerDatePrijevoz.getEditor().clear();
            textFieldKMdolazakPrijevoz.clear();
            textFieldKModlazakPrijevoz.clear();
            textFieldSredstvoPrijevoz.clear();
@@ -197,5 +234,8 @@ public class Controller{
         }
 
     }
+
+
+
 
 }

@@ -1,26 +1,29 @@
 package sample;
 
+import java.time.LocalDate;
+import java.util.Date;
+
 public class Podacioprijevozu{
 
-    public final String Datum;
-    public final String brojKmDolazak;
-    public final String brojKmOdlazak;
+    public final LocalDate Datum;
+    public final int brojKmDolazak;
+    public final int brojKmOdlazak;
     public final String prijevoznoSredstvo;
 
 
-    public Podacioprijevozu(String Datum1, String Brojkmd1, String brojkmodlazak1, String prijevoz1){
+    public Podacioprijevozu(LocalDate Datum1, int Brojkmd1, int brojkmodlazak1, String prijevoz1){
 
-        this.Datum = new String(Datum1);
-        this.brojKmDolazak = new String(Brojkmd1);
-        this.brojKmOdlazak = new String(brojkmodlazak1);
+        this.Datum = Datum1;
+        this.brojKmDolazak =  Brojkmd1;
+        this.brojKmOdlazak =  brojkmodlazak1;
         this.prijevoznoSredstvo = new String(prijevoz1);
     }
 
-    public String getDatum() { return Datum; }
-    public String getBrojKmDolazak() {
+    public LocalDate getDatum() { return Datum; }
+    public int getBrojKmDolazak() {
         return brojKmDolazak;
     }
-    public String getBrojKmOdlazak() { return brojKmOdlazak; }
+    public int getBrojKmOdlazak() { return brojKmOdlazak; }
     public String getPrijevoznoSredstvo() { return prijevoznoSredstvo; }
 
 }
