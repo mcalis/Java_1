@@ -1,25 +1,26 @@
 package sample;
 
-public class Podacioprijevozu {
-    public final String Datum;
-    public final String Brojkmd;
-    public final String brojkmodlazak;
-    public final String prijevoz;
-    public final String potpis;
+public class podaciOPrijevozu {
 
-    Podacioprijevozu(String Datum1, String Brojkmd1, String brojkmodlazak1, String prijevoz1){
+    public final String Datum;
+    public final String brojKmDolazak;
+    public final String brojKmOdlazak;
+    public final String prijevoznoSredstvo;
+
+
+    public podaciOPrijevozu(String Datum1, String Brojkmd1, String brojkmodlazak1, String prijevoz1){
+
         this.Datum = new String(Datum1);
-        this.Brojkmd = new String(Brojkmd1);
-        this.brojkmodlazak = new String(brojkmodlazak1);
-        this.prijevoz = new String(prijevoz1);
-        this.potpis= new String("");
+        this.brojKmDolazak = new String(Brojkmd1);
+        this.brojKmOdlazak = new String(brojkmodlazak1);
+        this.prijevoznoSredstvo = new String(prijevoz1);
     }
 
     public String getDatum() { return Datum; }
-    public String getBrojkmd() {
-        return Brojkmd;
+    public String getBrojKmDolazak() {
+        return brojKmDolazak;
     }
-    public String getBrojkmodlazak() { return brojkmodlazak; }
-    public String getPrijevoz() { return prijevoz; }
-    public String getPotpis(){ return potpis; }
+    public String getBrojKmOdlazak() { return brojKmOdlazak; }
+    public String getPrijevoznoSredstvo() { return prijevoznoSredstvo; }
+
 }
