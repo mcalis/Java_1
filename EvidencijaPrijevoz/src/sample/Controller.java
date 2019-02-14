@@ -237,7 +237,7 @@ public class Controller{
            Thread thread = new Thread(() -> {
                try {
                    // Wait for 5 secs
-                   Thread.sleep(1500);
+                   Thread.sleep(1000);
                    if (alert.isShowing()) {
                        Platform.runLater(() -> alert.close());
                    }
