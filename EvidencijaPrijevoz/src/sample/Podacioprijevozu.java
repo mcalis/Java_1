@@ -6,12 +6,12 @@ import java.util.Date;
 public class Podacioprijevozu{
 
     public final LocalDate Datum;
-    public final int brojKmDolazak;
-    public final int brojKmOdlazak;
+    public final Integer brojKmDolazak;
+    public final Integer brojKmOdlazak;
     public final String prijevoznoSredstvo;
 
 
-    public Podacioprijevozu(LocalDate Datum1, int Brojkmd1, int brojkmodlazak1, String prijevoz1){
+    public Podacioprijevozu(LocalDate Datum1, Integer Brojkmd1, Integer brojkmodlazak1, String prijevoz1){
 
         this.Datum = Datum1;
         this.brojKmDolazak =  Brojkmd1;
@@ -20,10 +20,10 @@ public class Podacioprijevozu{
     }
 
     public LocalDate getDatum() { return Datum; }
-    public int getBrojKmDolazak() {
+    public Integer getBrojKmDolazak() {
         return brojKmDolazak;
     }
-    public int getBrojKmOdlazak() { return brojKmOdlazak; }
+    public Integer getBrojKmOdlazak() { return brojKmOdlazak; }
     public String getPrijevoznoSredstvo() { return prijevoznoSredstvo; }
 
 }

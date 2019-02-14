@@ -9,10 +9,12 @@ import javafx.scene.control.*;
 import javafx.event.ActionEvent;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
+import javafx.util.StringConverter;
 
 import javax.swing.text.Document;
 import java.io.FileOutputStream;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Scanner;
 
@@ -24,6 +26,7 @@ public class Controller{
     public void initialize () {
         //Mora se unesti barem jedan zaposlenik, nakon unošenja gumb unosPutovanja postaje dostupan.
         unosPutovanja.setDisable(true);
+        
     }
 
     /**
@@ -91,7 +94,10 @@ public class Controller{
         unosPutovanja.setDisable(true);
         buttonUnosZaposlenika.setDisable(false);
     }
-
+    /**
+     * unos novog zaposlenika, te refresh tabličnog prikaza, koji je za novog zaposlenika prazan
+     * @param event
+     */
     @FXML
     private void unosZaposlenikaGumb (ActionEvent event)  {
         if (textFieldImePrezimeZaposlenika.getText().equalsIgnoreCase("") || textFieldAdresaStanovanja.getText().equalsIgnoreCase("") || textFieldAdresaRada.getText().equalsIgnoreCase("")){
@@ -141,7 +147,7 @@ public class Controller{
         });
     }
 
-    //provjera dali je unesen String u Text Field moguće promjeniti u Intiger
+    //provjera dali je unesen String u Text Field moguće promjeniti u Integer
 
     public boolean isInteger(String str) {
 
@@ -166,13 +172,9 @@ public class Controller{
         }
         return false;
     }
-
-
-
     /**
-     * spremanje podataka o jednom putovanju kad se klikne gumb Unesi
+     * spremanje podataka o jednom putovanju za odabranog Zaposlenika kad se klikne gumb Unesi
      * */
-
    @FXML
    private void spremanjeprijevoza(){
        if (isInteger(textFieldKMdolazakPrijevoz.getText()) || isInteger(textFieldKModlazakPrijevoz.getText()) ||DatePickerDatePrijevoz.getValue().equals(null) ||textFieldKMdolazakPrijevoz.getText().equalsIgnoreCase("") || textFieldKModlazakPrijevoz.getText().equalsIgnoreCase("") || textFieldSredstvoPrijevoz.getText().equalsIgnoreCase("")){
@@ -182,7 +184,7 @@ public class Controller{
 
            Podacioprijevozu objektPodaciOPrijevozu = new Podacioprijevozu(DatePickerDatePrijevoz.getValue(), Integer.parseInt(textFieldKMdolazakPrijevoz.getText()), Integer.parseInt(textFieldKModlazakPrijevoz.getText()),  textFieldSredstvoPrijevoz.getText());
 
-           // pronalazi zaposlenika čije ime je trenutno u textFieldu
+           // pronalazi zaposlenika u listiZaposlenika čije ime je trenutno u textFieldu
            String odabraniZaposlenikString = textFieldImePrezimeZaposlenika.getText();
            Zaposlenik trazeni = listaZaposlenika.stream()
                    .filter(Zaposlenik -> odabraniZaposlenikString.equalsIgnoreCase(Zaposlenik.getImePrezimeZaposlenika())).findAny().orElse(null);
