@@ -1,5 +1,6 @@
 package sample;
 
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
@@ -13,12 +14,12 @@ import javafx.util.StringConverter;
 
 import javax.swing.text.Document;
 import java.io.FileOutputStream;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Scanner;
-
-
 
 
 public class Controller{
@@ -26,9 +27,25 @@ public class Controller{
     public void initialize () {
         //Mora se unesti barem jedan zaposlenik, nakon unošenja gumb unosPutovanja postaje dostupan.
         unosPutovanja.setDisable(true);
+
+        //primjer postavljanje stupaca u tablicu
+        DatumStupac.setCellValueFactory(
+                new PropertyValueFactory<>("Datum")
+        );
+        KmDolazakStupac.setCellValueFactory(
+                new PropertyValueFactory<>("brojKmDolazak")
+        );
+        KmOdlazakStupac.setCellValueFactory(
+                new PropertyValueFactory<>("brojKmOdlazak")
+        );
+        prijevozStupac.setCellValueFactory(
+                new PropertyValueFactory<>("prijevoznoSredstvo")
+        );
+        potpisStupac.setCellValueFactory(
+                new PropertyValueFactory<>("potpisStupac")
+        );
         
     }
-
     /**
      * U listu listaZaposlenika spremaju se svi Zaposlenici
      */
@@ -60,6 +77,8 @@ public class Controller{
     ComboBox comboBoxZaposlenik;
     @FXML
     DatePicker DatePickerDatePrijevoz;
+    @FXML
+    DatePicker DatePickerZaposlenikMjesec;
     @FXML
     TextField textFieldAdresaStanovanja;
     @FXML
@@ -191,24 +210,6 @@ public class Controller{
 
            // dodaje jedno putovanje za zaposlenika koji se nalazi odabran - trenutni u textFieldu
            trazeni.listaPutovanja.add(objektPodaciOPrijevozu);
-
-
-           //primjer postavljanje podataka u tablicu
-           DatumStupac.setCellValueFactory(
-                   new PropertyValueFactory<>("Datum")
-           );
-           KmDolazakStupac.setCellValueFactory(
-                   new PropertyValueFactory<>("brojKmDolazak")
-           );
-           KmOdlazakStupac.setCellValueFactory(
-                   new PropertyValueFactory<>("brojKmOdlazak")
-           );
-           prijevozStupac.setCellValueFactory(
-                   new PropertyValueFactory<>("prijevoznoSredstvo")
-           );
-           potpisStupac.setCellValueFactory(
-                   new PropertyValueFactory<>("potpisStupac")
-           );
 
            // puni tablicu putovanja za odabranog zaposlenika
            tablePrijevoz.setItems(trazeni.listaPutovanja);
