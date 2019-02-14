@@ -82,6 +82,7 @@ public class Controller{
         textFieldAdresaRada.clear();
         textFieldAdresaStanovanja.clear();
         unosPutovanja.setDisable(true);
+        buttonUnosZaposlenika.setDisable(false);
     }
 
     @FXML
@@ -103,6 +104,7 @@ public class Controller{
             Zaposlenik trazeni = listaZaposlenika.stream()
                     .filter(Zaposlenik -> odabraniZaposlenikString.equalsIgnoreCase(Zaposlenik.getImePrezimeZaposlenika())).findAny().orElse(null);
             tablePrijevoz.setItems(trazeni.listaPutovanja);
+            buttonUnosZaposlenika.setDisable(true);
         }
     }
     /**
