@@ -1,5 +1,11 @@
 package sample;
 
+import com.lowagie.text.Document;
+import com.lowagie.text.DocumentException;
+import com.lowagie.text.Paragraph;
+import com.lowagie.text.pdf.PdfPTable;
+import com.lowagie.text.pdf.PdfTable;
+import com.lowagie.text.pdf.PdfWriter;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -10,11 +16,23 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Callback;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.time.LocalDate;
 import java.util.Optional;
 
 
 public class Controller{
+
+
+    //globalne varijable za generiranje PDFa
+    String[] Ptrijevoznosredstvo = new String[40];
+    String[] DatumPDF= new String[40];
+    String[] KMDPDF= new String[40];
+    String[] KMOPDF= new String[40];
+    int BrojPDF=0;
+
+
 
     public void initialize () {
         //Mora se unesti barem jedan zaposlenik, nakon unošenja gumb unosPutovanja postaje dostupan.
@@ -83,6 +101,8 @@ public class Controller{
     // pomocna lista stringova za comboBox
     private ObservableList<String> listaImena = FXCollections.observableArrayList();
 
+    private ObservableList<Podacioprijevozu> podacizapdf = FXCollections.observableArrayList();
+
     //za prijevoznoSredstvo
     //tablica
     FXMLLoader loader = new FXMLLoader(Controller.class.getResource("C:\\Users\\David\\Desktop\\EvidencijaPrijevoz\\src\\sample\\sample.fxml"));
@@ -124,6 +144,8 @@ public class Controller{
     Button buttonUnosZaposlenika;
     @FXML
     Button buttonOcistiCelijeZaposlenik;
+    @FXML
+    Button Brisanjeredtablice;
 
     //za evidenciju
     @FXML
@@ -250,6 +272,13 @@ public class Controller{
            // dodaje jedno putovanje za zaposlenika koji se nalazi odabran - trenutni u textFieldu
            trazeni.listaPutovanja.add(objektPodaciOPrijevozu);
 
+           //Dodavanje podataka iz tablice u globalne varijable.
+           DatumPDF[BrojPDF]=datePickerDatePrijevoz.getValue().toString();
+           KMDPDF[BrojPDF]=textFieldKMdolazakPrijevoz.getText();
+           KMOPDF[BrojPDF]=textFieldKModlazakPrijevoz.getText();
+           Ptrijevoznosredstvo[BrojPDF]=textFieldSredstvoPrijevoz.getText();
+           BrojPDF++;
+
            // puni tablicu putovanja za odabranog zaposlenika i za odabrani mjesec
             datePickerFiltriranje();
            // brisanje textFielda nakon unosa
@@ -276,6 +305,9 @@ public class Controller{
            thread.setDaemon(true);
            thread.start();
            Optional<ButtonType> result = alert.showAndWait();
+
+
+
        }
     }
     // metoda koja rukuje promjenom selekcije datuma u gornjem datePickeru, za odabrani datum vraca mjesec, te za odabrani mjesec pokazuje putovanja zaposlenika, ova metoda poziva se i u ostalim metodama kao refresh prikaza tablice
@@ -315,7 +347,49 @@ public class Controller{
         }
     }
     @FXML
-    public void filtriranjetablice(ActionEvent event) {
-        
+    public void Brisanjereda(ActionEvent event) {
+        tablePrijevoz.getItems().removeAll(tablePrijevoz.getSelectionModel().getSelectedItem());
+
     }
+
+    @FXML
+    public void fillpdf(){
+        Document doc= new Document();
+        String filanme = "C:\\Users\\David\\Desktop\\EvidencijaPrijevoz.pdf";
+        try {
+            PdfWriter.getInstance(doc, new FileOutputStream(filanme));
+
+            doc.open();
+            String sveupdfu=new String();
+            sveupdfu = "Evidencija prijevoza ";
+            Paragraph para= new Paragraph(sveupdfu);
+            doc.add(para);
+            PdfPTable table1= new PdfPTable(4);
+            table1.addCell("Datum");
+            table1.addCell("Kilometri dolazak");
+            table1.addCell("Kilometri odlazak");
+            table1.addCell("Prijevozno sredstvo");
+            podacizapdf = tablePrijevoz.getItems();
+            for (int i=0; i<BrojPDF;i++){
+                    String DatumPDF1 = DatumPDF[i];
+                    String KMDPDF1= KMDPDF[i];
+                    String KMOPDF1 = KMOPDF[i];
+                String Ptrijevoznosredstvo1 = Ptrijevoznosredstvo[i];
+
+                table1.addCell(DatumPDF1);
+                table1.addCell(KMDPDF1);
+                table1.addCell(KMOPDF1);
+                table1.addCell(Ptrijevoznosredstvo1);
+            }
+
+            doc.add(table1);
+
+            doc.close();
+
+        } catch (Exception e) {
+            System.err.println(e);
+        }
+    }
+
+
 }
