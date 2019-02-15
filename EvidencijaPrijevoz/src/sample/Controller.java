@@ -1,10 +1,9 @@
 package sample;
 
+import com.lowagie.text.Chunk;
 import com.lowagie.text.Document;
-import com.lowagie.text.DocumentException;
 import com.lowagie.text.Paragraph;
 import com.lowagie.text.pdf.PdfPTable;
-import com.lowagie.text.pdf.PdfTable;
 import com.lowagie.text.pdf.PdfWriter;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -16,7 +15,6 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Callback;
 
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.time.LocalDate;
 import java.util.Optional;
@@ -355,40 +353,69 @@ public class Controller{
     @FXML
     public void fillpdf(){
         Document doc= new Document();
-        String filanme = "C:\\Users\\David\\Desktop\\EvidencijaPrijevoz.pdf";
+        String imePdfDatoteke = "EvidencijaPrijevoz.pdf";
+
+        listaPutovanjaPojedinogMjeseca.clear();
+        String odabraniZaposlenikString = textFieldImePrezimeZaposlenika.getText();
+        Zaposlenik trazeni = listaZaposlenika.stream()
+                .filter(Zaposlenik -> odabraniZaposlenikString.equalsIgnoreCase(Zaposlenik.getImePrezimeZaposlenika())).findAny().orElse(null);
+
+        Integer mjesecBroj = datePickerZaposlenikMjesec.getValue().getMonthValue();
+        Integer godinaBroj = datePickerZaposlenikMjesec.getValue().getYear();
+
+        for (Podacioprijevozu pod: trazeni.listaPutovanja) {
+            if (pod.Datum.getMonthValue() == mjesecBroj && pod.Datum.getYear()== godinaBroj) listaPutovanjaPojedinogMjeseca.add(pod);
+        }
+        tablePrijevoz.setItems(listaPutovanjaPojedinogMjeseca);
+
         try {
-            PdfWriter.getInstance(doc, new FileOutputStream(filanme));
+            PdfWriter.getInstance(doc, new FileOutputStream(imePdfDatoteke));
 
             doc.open();
-            String sveupdfu=new String();
-            sveupdfu = "Evidencija prijevoza ";
-            Paragraph para= new Paragraph(sveupdfu);
+
+            //String sveupdfu=new String();
+            //sveupdfu = "Evidencija prijevoza ";
+
+            Paragraph para= new Paragraph("Evidencija za: "+ trazeni.imePrezimeZaposlenika);
             doc.add(para);
+            doc.add(Chunk.NEWLINE);
             PdfPTable table1= new PdfPTable(4);
             table1.addCell("Datum");
             table1.addCell("Kilometri dolazak");
             table1.addCell("Kilometri odlazak");
             table1.addCell("Prijevozno sredstvo");
-            podacizapdf = tablePrijevoz.getItems();
+
+            /*podacizapdf = tablePrijevoz.getItems();
             for (int i=0; i<BrojPDF;i++){
                     String DatumPDF1 = DatumPDF[i];
                     String KMDPDF1= KMDPDF[i];
                     String KMOPDF1 = KMOPDF[i];
-                String Ptrijevoznosredstvo1 = Ptrijevoznosredstvo[i];
+                    String Ptrijevoznosredstvo1 = Ptrijevoznosredstvo[i];
 
                 table1.addCell(DatumPDF1);
                 table1.addCell(KMDPDF1);
                 table1.addCell(KMOPDF1);
                 table1.addCell(Ptrijevoznosredstvo1);
+            }*/
+
+            for (Podacioprijevozu pod: listaPutovanjaPojedinogMjeseca) {
+                String DatumPDF1 = pod.Datum.toString();
+                String KMDPDF1 = pod.brojKmDolazak.toString();
+                String KMOPDF1 = pod.brojKmOdlazak.toString();
+                String Ptrijevoznosredstvo1 = pod.getPrijevoznoSredstvo();
+
+                table1.addCell(DatumPDF1);
+                table1.addCell(KMDPDF1);
+                table1.addCell(KMOPDF1);
+                table1.addCell(Ptrijevoznosredstvo1);
+
             }
-
             doc.add(table1);
-
             doc.close();
-
         } catch (Exception e) {
             System.err.println(e);
         }
+
     }
 
 
