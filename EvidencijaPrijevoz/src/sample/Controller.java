@@ -21,17 +21,6 @@ import java.util.Optional;
 
 
 public class Controller{
-
-
-    //globalne varijable za generiranje PDFa
-    String[] Ptrijevoznosredstvo = new String[40];
-    String[] DatumPDF= new String[40];
-    String[] KMDPDF= new String[40];
-    String[] KMOPDF= new String[40];
-    int BrojPDF=0;
-
-
-
     public void initialize () {
         //Mora se unesti barem jedan zaposlenik, nakon unošenja gumb unosPutovanja postaje dostupan.
         unosPutovanja.setDisable(true);
@@ -142,10 +131,8 @@ public class Controller{
     Button buttonUnosZaposlenika;
     @FXML
     Button buttonOcistiCelijeZaposlenik;
-    @FXML
-    Button Brisanjeredtablice;
 
-    //za evidenciju
+    //za evidenciju - Zadatak 2
     @FXML
     TextField brmjesece;
     @FXML
@@ -270,13 +257,6 @@ public class Controller{
            // dodaje jedno putovanje za zaposlenika koji se nalazi odabran - trenutni u textFieldu
            trazeni.listaPutovanja.add(objektPodaciOPrijevozu);
 
-           //Dodavanje podataka iz tablice u globalne varijable.
-           DatumPDF[BrojPDF]=datePickerDatePrijevoz.getValue().toString();
-           KMDPDF[BrojPDF]=textFieldKMdolazakPrijevoz.getText();
-           KMOPDF[BrojPDF]=textFieldKModlazakPrijevoz.getText();
-           Ptrijevoznosredstvo[BrojPDF]=textFieldSredstvoPrijevoz.getText();
-           BrojPDF++;
-
            // puni tablicu putovanja za odabranog zaposlenika i za odabrani mjesec
             datePickerFiltriranje();
            // brisanje textFielda nakon unosa
@@ -304,11 +284,10 @@ public class Controller{
            thread.start();
            Optional<ButtonType> result = alert.showAndWait();
 
-
-
        }
     }
-    // metoda koja rukuje promjenom selekcije datuma u gornjem datePickeru, za odabrani datum vraca mjesec, te za odabrani mjesec pokazuje putovanja zaposlenika, ova metoda poziva se i u ostalim metodama kao refresh prikaza tablice
+    // metoda koja rukuje promjenom selekcije datuma u gornjem datePickeru, za odabrani datum vraca mjesec, te za odabrani mjesec pokazuje putovanja zaposlenika, ova metoda poziva se i u ostalim metodama kao refresh prikaza tablice.
+    // Dijelovi metode rabe se dohvaćanje željenog zaposlenika i mjeseca, na drugim mjestima u kodu.
     @FXML
     private void datePickerFiltriranje (){
         if (textFieldImePrezimeZaposlenika.getText().equalsIgnoreCase("") || textFieldAdresaStanovanja.getText().equalsIgnoreCase("") || textFieldAdresaRada.getText().equalsIgnoreCase("") || listaZaposlenika.isEmpty()){
@@ -327,7 +306,6 @@ public class Controller{
                 if (pod.Datum.getMonthValue() == mjesecBroj && pod.Datum.getYear()== godinaBroj) listaPutovanjaPojedinogMjeseca.add(pod);
             }
             tablePrijevoz.setItems(listaPutovanjaPojedinogMjeseca);
-
         }
     }
     /**
@@ -345,16 +323,7 @@ public class Controller{
         }
     }
     @FXML
-    public void Brisanjereda(ActionEvent event) {
-        tablePrijevoz.getItems().removeAll(tablePrijevoz.getSelectionModel().getSelectedItem());
-
-    }
-
-    @FXML
     public void fillpdf(){
-        Document doc= new Document();
-        String imePdfDatoteke = "EvidencijaPrijevoz.pdf";
-
         listaPutovanjaPojedinogMjeseca.clear();
         String odabraniZaposlenikString = textFieldImePrezimeZaposlenika.getText();
         Zaposlenik trazeni = listaZaposlenika.stream()
@@ -368,14 +337,11 @@ public class Controller{
         }
         tablePrijevoz.setItems(listaPutovanjaPojedinogMjeseca);
 
+        Document doc= new Document();
+        String imePdfDatoteke = "EvidencijaPrijevoz.pdf";
         try {
             PdfWriter.getInstance(doc, new FileOutputStream(imePdfDatoteke));
-
             doc.open();
-
-            //String sveupdfu=new String();
-            //sveupdfu = "Evidencija prijevoza ";
-
             Paragraph para= new Paragraph("Evidencija za: "+ trazeni.imePrezimeZaposlenika);
             doc.add(para);
             doc.add(Chunk.NEWLINE);
@@ -399,24 +365,15 @@ public class Controller{
             }*/
 
             for (Podacioprijevozu pod: listaPutovanjaPojedinogMjeseca) {
-                String DatumPDF1 = pod.Datum.toString();
-                String KMDPDF1 = pod.brojKmDolazak.toString();
-                String KMOPDF1 = pod.brojKmOdlazak.toString();
-                String Ptrijevoznosredstvo1 = pod.getPrijevoznoSredstvo();
-
-                table1.addCell(DatumPDF1);
-                table1.addCell(KMDPDF1);
-                table1.addCell(KMOPDF1);
-                table1.addCell(Ptrijevoznosredstvo1);
-
+                table1.addCell(pod.Datum.toString());
+                table1.addCell(pod.brojKmDolazak.toString());
+                table1.addCell(pod.brojKmOdlazak.toString());
+                table1.addCell(pod.getPrijevoznoSredstvo());
             }
             doc.add(table1);
             doc.close();
         } catch (Exception e) {
             System.err.println(e);
         }
-
     }
-
-
 }
