@@ -261,7 +261,7 @@ public class Controller{
            // linije odavde pa do kraja metode su za prikaz poruke nakon dodanog putovanja, poruka samonestaje nakon 1.5 sec
            Alert alert = new Alert(Alert.AlertType.INFORMATION);
            alert.setTitle("Putovanje");
-           alert.setHeaderText("DODANO PUTOVANJE U "+datePickerDatePrijevoz.getValue().getMonthValue()+". MJESEC");
+           alert.setHeaderText("DODANO PUTOVANJE U "+datePickerDatePrijevoz.getValue().getMonthValue()+". MJESEC "+datePickerDatePrijevoz.getValue().getYear()+".");
            Thread thread = new Thread(() -> {
                try {
                    // Wait for 5 secs
