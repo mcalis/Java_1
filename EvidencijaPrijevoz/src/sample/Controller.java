@@ -53,8 +53,21 @@ public class Controller{
                 }
             }
         };
-        datePickerDatePrijevoz.setDayCellFactory(dayCellFactory); // ograničavanje odabira datuma do današnjeg dana
-        datePickerZaposlenikMjesec.setDayCellFactory((dayCellFactory));  // ograničavanje odabira datuma do današnjeg dana
+        datePickerDatePrijevoz.setDayCellFactory(dayCellFactory); // ograničavanje odabira datuma do današnjeg datuma
+
+        // ograničenje odabira dana u mjesecu na 15. u mjesecu, malo je intuitivnije :)
+        final Callback<DatePicker, DateCell> dayCellFactoryOdabirMjeseca;
+        dayCellFactoryOdabirMjeseca = (final DatePicker datePicker) -> new DateCell() {
+            @Override
+            public void updateItem(LocalDate item, boolean empty) {
+                super.updateItem(item, empty);
+                if (item.getDayOfMonth() <15 || item.getDayOfMonth() >15 ) {
+                    setDisable(true);
+                    setStyle("-fx-background-color: #ffc0cb;"); //To set background on different color
+                }
+            }
+        };
+        datePickerZaposlenikMjesec.setDayCellFactory((dayCellFactoryOdabirMjeseca));  // ograničenje odabira dana u mjesecu na 15. u mjesecu, malo je intuitivnije :)
     }
     /**
      * U listu listaZaposlenika spremaju se svi Zaposlenici
@@ -179,7 +192,6 @@ public class Controller{
     }
 
     //provjera dali je unesen String u Text Field moguće promjeniti u Integer
-
     public boolean isInteger(String str) {
 
         if (str == null) {
