@@ -19,7 +19,11 @@ public class Controller{
     public void initialize () {
         //Mora se unesti barem jedan zaposlenik, nakon unošenja gumb unosPutovanja postaje dostupan.
         unosPutovanja.setDisable(true);
-        // postavljanje današnjeg datuma, iz kojeg se uzima trenutni mjesec za prikaz
+        datePickerDatePrijevoz.setDisable(true);
+        textFieldKModlazakPrijevoz.setDisable(true);
+        textFieldKMdolazakPrijevoz.setDisable(true);
+        textFieldSredstvoPrijevoz.setDisable(true);
+        // početno postavljanje današnjeg datuma
         datePickerZaposlenikMjesec.setValue(LocalDate.now());
 
         //primjer postavljanje stupaca u tablicu
@@ -136,6 +140,10 @@ public class Controller{
         textFieldAdresaRada.clear();
         textFieldAdresaStanovanja.clear();
         unosPutovanja.setDisable(true);
+        datePickerDatePrijevoz.setDisable(true);
+        textFieldKModlazakPrijevoz.setDisable(true);
+        textFieldKMdolazakPrijevoz.setDisable(true);
+        textFieldSredstvoPrijevoz.setDisable(true);
         buttonUnosZaposlenika.setDisable(false);
     }
     /**
@@ -155,6 +163,10 @@ public class Controller{
 
             //Mora se unesti barem jedan zaposlenik, onda se omogući unos putovanja, tek onda za njega putovanja
             unosPutovanja.setDisable(false);
+            datePickerDatePrijevoz.setDisable(false);
+            textFieldKModlazakPrijevoz.setDisable(false);
+            textFieldKMdolazakPrijevoz.setDisable(false);
+            textFieldSredstvoPrijevoz.setDisable(false);
 
             // ove četiri linije ispod u ovoj metodi, su samo refresh tablice na prazno nakon unosa novog zaposlenika
             String odabraniZaposlenikString = textFieldImePrezimeZaposlenika.getText();
@@ -178,6 +190,10 @@ public class Controller{
         textFieldAdresaStanovanja.setText(trazeni.getAdresaStanovanja());
         datePickerFiltriranje();
         unosPutovanja.setDisable(false);
+        datePickerDatePrijevoz.setDisable(false);
+        textFieldKModlazakPrijevoz.setDisable(false);
+        textFieldKMdolazakPrijevoz.setDisable(false);
+        textFieldSredstvoPrijevoz.setDisable(false);
     }
     /**
      * Ispis okvira s upozorenjem
