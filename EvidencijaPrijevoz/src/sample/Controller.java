@@ -88,8 +88,6 @@ public class Controller{
     // pomocna lista stringova za comboBox
     private ObservableList<String> listaImena = FXCollections.observableArrayList();
 
-    private ObservableList<Podacioprijevozu> podacizapdf = FXCollections.observableArrayList();
-
     //za prijevoznoSredstvo
     //tablica
     FXMLLoader loader = new FXMLLoader(Controller.class.getResource("C:\\Users\\David\\Desktop\\EvidencijaPrijevoz\\src\\sample\\sample.fxml"));
@@ -131,6 +129,8 @@ public class Controller{
     Button buttonUnosZaposlenika;
     @FXML
     Button buttonOcistiCelijeZaposlenik;
+    @FXML
+    Button buttonEksportPDF;
 
     //za evidenciju - Zadatak 2
     @FXML
@@ -323,7 +323,7 @@ public class Controller{
         }
     }
     @FXML
-    public void fillpdf(){
+    public void eksportPDF(){
         listaPutovanjaPojedinogMjeseca.clear();
         String odabraniZaposlenikString = textFieldImePrezimeZaposlenika.getText();
         Zaposlenik trazeni = listaZaposlenika.stream()
@@ -337,41 +337,36 @@ public class Controller{
         }
         tablePrijevoz.setItems(listaPutovanjaPojedinogMjeseca);
 
-        Document doc= new Document();
-        String imePdfDatoteke = "EvidencijaPrijevoz.pdf";
+        // prema dolje je eksport u PDF
+        Document noviDokument = new Document();
+        String imeDatotekePDF = "EvidencijaPrijevoz.pdf";
         try {
-            PdfWriter.getInstance(doc, new FileOutputStream(imePdfDatoteke));
-            doc.open();
-            Paragraph para= new Paragraph("Evidencija za: "+ trazeni.imePrezimeZaposlenika);
-            doc.add(para);
-            doc.add(Chunk.NEWLINE);
-            PdfPTable table1= new PdfPTable(4);
-            table1.addCell("Datum");
-            table1.addCell("Kilometri dolazak");
-            table1.addCell("Kilometri odlazak");
-            table1.addCell("Prijevozno sredstvo");
-
-            /*podacizapdf = tablePrijevoz.getItems();
-            for (int i=0; i<BrojPDF;i++){
-                    String DatumPDF1 = DatumPDF[i];
-                    String KMDPDF1= KMDPDF[i];
-                    String KMOPDF1 = KMOPDF[i];
-                    String Ptrijevoznosredstvo1 = Ptrijevoznosredstvo[i];
-
-                table1.addCell(DatumPDF1);
-                table1.addCell(KMDPDF1);
-                table1.addCell(KMOPDF1);
-                table1.addCell(Ptrijevoznosredstvo1);
-            }*/
+            PdfWriter.getInstance(noviDokument, new FileOutputStream(imeDatotekePDF));
+            noviDokument.open();
+            noviDokument.add(new Paragraph("EVIDENCIJA PUTOVANJA ---------------------------------"));
+            noviDokument.add(Chunk.NEWLINE);
+            noviDokument.add(new Paragraph("Ime i Prezime: "+ trazeni.getImePrezimeZaposlenika()));
+            noviDokument.add(new Paragraph("Adresa rada: "+ trazeni.getAdresaRada()));
+            noviDokument.add(new Paragraph("Adresa stanovanja: "+ trazeni.getAdresaStanovanja()));
+            noviDokument.add(Chunk.NEWLINE);
+            PdfPTable tablicaPDF = new PdfPTable(4);
+            tablicaPDF.addCell("Datum");
+            tablicaPDF.addCell("Kilometri dolazak");
+            tablicaPDF.addCell("Kilometri odlazak");
+            tablicaPDF.addCell("Prijevozno sredstvo");
 
             for (Podacioprijevozu pod: listaPutovanjaPojedinogMjeseca) {
-                table1.addCell(pod.Datum.toString());
-                table1.addCell(pod.brojKmDolazak.toString());
-                table1.addCell(pod.brojKmOdlazak.toString());
-                table1.addCell(pod.getPrijevoznoSredstvo());
+                tablicaPDF.addCell(pod.Datum.toString());
+                tablicaPDF.addCell(pod.brojKmDolazak.toString());
+                tablicaPDF.addCell(pod.brojKmOdlazak.toString());
+                tablicaPDF.addCell(pod.getPrijevoznoSredstvo());
             }
-            doc.add(table1);
-            doc.close();
+            tablicaPDF.addCell("SUMA");
+            tablicaPDF.addCell("suma kilometara ?");
+            tablicaPDF.addCell("suma kilometara ?");
+            tablicaPDF.addCell("");
+            noviDokument.add(tablicaPDF);
+            noviDokument.close();
         } catch (Exception e) {
             System.err.println(e);
         }
