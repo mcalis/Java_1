@@ -47,7 +47,7 @@
                                     <ComboBox fx:id="comboBoxZaposlenik" layoutX="796.0" layoutY="32.0" onAction="#ComboBoxChanged" prefHeight="25.0" prefWidth="203.0" />
                                     <Button fx:id="buttonUnosZaposlenika" layoutX="243.0" layoutY="119.0" mnemonicParsing="false" onAction="#unosZaposlenikaGumb" prefHeight="25.0" prefWidth="155.0" text="Unos Novog Zaposlenika" />
                                     <Button fx:id="buttonOcistiCelijeZaposlenik" layoutX="411.0" layoutY="119.0" mnemonicParsing="false" onAction="#buttonOcistiCelijeZaposlenik" prefHeight="25.0" prefWidth="99.0" text="Očisti ćelije" />
-                                    <DatePicker fx:id="datePickerZaposlenikMjesec" layoutX="797.0" layoutY="89.0" onAction="#datePickerFiltriranje" prefHeight="25.0" prefWidth="202.0" />
+                                    <DatePicker fx:id="datePickerZaposlenikMjesec" editable="false" layoutX="797.0" layoutY="89.0" onAction="#datePickerFiltriranje" prefHeight="25.0" prefWidth="202.0" />
                                     <Label layoutX="796.0" layoutY="6.0" prefHeight="17.0" prefWidth="62.0" text="Zaposlenik" />
                                     <Label layoutX="797.0" layoutY="64.0" prefHeight="17.0" prefWidth="148.0" text="Odabir Mjeseca za Prikaz" />
                       </children>
@@ -65,8 +65,8 @@
                            <font>
                               <Font size="16.0" />
                            </font></Button>
-                        <DatePicker fx:id="datePickerDatePrijevoz" layoutX="26.0" layoutY="740.0" prefHeight="12.0" prefWidth="156.0" />
-                        <Button fx:id="buttonEksportPDF" layoutX="977.0" layoutY="645.0" mnemonicParsing="false" onAction="#eksportPDF" text="PDF" />
+                        <DatePicker fx:id="datePickerDatePrijevoz" editable="false" layoutX="26.0" layoutY="740.0" prefHeight="12.0" prefWidth="156.0" />
+                        <Button fx:id="buttonEksportPDF" layoutX="962.0" layoutY="644.0" mnemonicParsing="false" onAction="#eksportPDF" prefHeight="34.0" prefWidth="89.0" text="PDF" />
               </children>
             </AnchorPane>
           </content>
