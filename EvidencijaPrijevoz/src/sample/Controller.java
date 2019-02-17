@@ -345,17 +345,16 @@ public class Controller{
     }
     @FXML
     private void brisanjeJednogSelektiranogPutovanja () {
+        String odabraniZaposlenikString = textFieldImePrezimeZaposlenika.getText();
+        Zaposlenik trazeni = listaZaposlenika.stream()
+                .filter(Zaposlenik -> odabraniZaposlenikString.equalsIgnoreCase(Zaposlenik.getImePrezimeZaposlenika())).findAny().orElse(null);
         Podacioprijevozu selektiranoPutovanje = tablePrijevoz.getSelectionModel().getSelectedItem();
         if (textFieldImePrezimeZaposlenika.getText().equalsIgnoreCase("") || textFieldAdresaStanovanja.getText().equalsIgnoreCase("") || textFieldAdresaRada.getText().equalsIgnoreCase("") || listaZaposlenika.isEmpty()
-             || selektiranoPutovanje == null   )
+             || selektiranoPutovanje == null  || trazeni == null )
         {
             upozorenje();
         }
         else {
-            String odabraniZaposlenikString = textFieldImePrezimeZaposlenika.getText();
-            Zaposlenik trazeni = listaZaposlenika.stream()
-                    .filter(Zaposlenik -> odabraniZaposlenikString.equalsIgnoreCase(Zaposlenik.getImePrezimeZaposlenika())).findAny().orElse(null);
-
             trazeni.listaPutovanja.remove(selektiranoPutovanje);
 
             datePickerFiltriranje();
