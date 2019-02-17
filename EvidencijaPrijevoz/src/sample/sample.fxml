@@ -16,7 +16,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<GridPane alignment="CENTER" hgap="10.0" prefHeight="800.0" prefWidth="1100.0" vgap="10.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+<GridPane alignment="CENTER" hgap="10.0" prefHeight="800.0" prefWidth="1100.0" vgap="10.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
   <children>
     <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" GridPane.columnIndex="0" GridPane.rowIndex="0">
       <tabs>
@@ -74,65 +74,34 @@
         </Tab>
         <Tab text="Evidencija dolaska">
           <content>
-            <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+            <AnchorPane id="Content" fx:id="evidencijatab" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
               <children>
-                <TableView layoutX="50.0" layoutY="66.0" prefHeight="103.0" prefWidth="1000.0">
-                  <columns>
-                    <TableColumn fx:id="imeprezimeevidencija" maxWidth="5000.0" minWidth="10.0" prefWidth="114.0" text="Ime Prezime" />
-                    <TableColumn fx:id="e1" maxWidth="5000.0" minWidth="10.0" prefWidth="25.0" text="1" />
-                    <TableColumn fx:id="e2" maxWidth="5000.0" minWidth="10.0" prefWidth="25.0" text="2" />
-                    <TableColumn fx:id="e3" maxWidth="5000.0" minWidth="10.0" prefWidth="25.0" text="3" />
-                    <TableColumn fx:id="e4" maxWidth="5000.0" minWidth="10.0" prefWidth="25.0" text="4" />
-                    <TableColumn fx:id="e5" maxWidth="5000.0" minWidth="10.0" prefWidth="25.0" text="5" />
-                    <TableColumn fx:id="e6" maxWidth="5000.0" minWidth="10.0" prefWidth="25.0" text="6" />
-                    <TableColumn fx:id="e7" maxWidth="5000.0" minWidth="10.0" prefWidth="25.0" text="7" />
-                    <TableColumn fx:id="e8" maxWidth="5000.0" minWidth="10.0" prefWidth="25.0" text="8" />
-                    <TableColumn fx:id="e9" prefWidth="25.0" text="9" />
-                    <TableColumn fx:id="e10" maxWidth="5000.0" minWidth="10.0" prefWidth="30.0" text="10" />
-                    <TableColumn fx:id="e11" prefWidth="30.0" text="11" />
-                    <TableColumn fx:id="e12" prefWidth="30.0" text="12" />
-                    <TableColumn fx:id="e13" prefWidth="30.0" text="13" />
-                    <TableColumn fx:id="e14" prefWidth="30.0" text="14" />
-                    <TableColumn fx:id="e15" prefWidth="30.0" text="15" />
-                    <TableColumn fx:id="e16" prefWidth="30.0" text="16" />
-                    <TableColumn fx:id="e17" prefWidth="30.0" text="17" />
-                    <TableColumn fx:id="e18" prefWidth="30.0" text="18" />
-                    <TableColumn fx:id="e19" prefWidth="30.0" text="19" />
-                    <TableColumn fx:id="e20" prefWidth="30.0" text="20" />
-                    <TableColumn fx:id="e21" prefWidth="30.0" text="21" />
-                    <TableColumn fx:id="e22" prefWidth="30.0" text="22" />
-                    <TableColumn fx:id="e23" prefWidth="30.0" text="23" />
-                    <TableColumn fx:id="e24" maxWidth="5000.0" minWidth="10.0" prefWidth="30.0" text="24" />
-                    <TableColumn fx:id="e25" prefWidth="30.0" text="25" />
-                    <TableColumn fx:id="e26" prefWidth="30.0" text="26" />
-                    <TableColumn fx:id="e27" maxWidth="5000.0" minWidth="10.0" prefWidth="30.0" text="27" />
-                    <TableColumn fx:id="e28" prefWidth="30.0" text="28" />
-                    <TableColumn fx:id="e29" prefWidth="30.0" text="29" />
-                    <TableColumn fx:id="e30" maxWidth="5000.0" minWidth="10.0" prefWidth="30.0" text="30" />
-                    <TableColumn fx:id="e31" maxWidth="5000.0" minWidth="10.0" prefWidth="30.0" text="31" />
-                  </columns>
-                </TableView>
                 <Label layoutX="68.0" layoutY="25.0" text="POMOĆNA EVIDENCIJA DOLAZAKA NA POSAO          Fakultet informatike u Puli" />
-                <TextField fx:id="brmjesece" layoutX="140.0" layoutY="190.0" prefWidth="111.0" />
-                <Label layoutX="41.0" layoutY="193.0" text="Za mjesec" />
-                <Label layoutX="47.0" layoutY="338.0" text="LEGENDA:" />
-                <Label layoutX="47.0" layoutY="376.0" text="Rad" />
-                <Label layoutX="47.0" layoutY="411.0" text="Blagdani i praznici" />
-                <Label layoutX="47.0" layoutY="446.0" text="Bolovanje" />
-                <Label layoutX="47.0" layoutY="477.0" text="Službeni put" />
-                <Label layoutX="47.0" layoutY="511.0" text="Ostalo (nd, pd, bo, go, i sl) " />
-                <Label layoutX="55.0" layoutY="545.0" text="Slobodan dan" />
-                <Label layoutX="312.0" layoutY="371.0" text="R" />
-                <Label layoutX="312.0" layoutY="406.0" text="P" />
-                <Label layoutX="312.0" layoutY="441.0" text="B" />
-                <Label layoutX="312.0" layoutY="477.0" text="SP" />
-                <Label layoutX="312.0" layoutY="511.0" text="OS" />
-                <Label layoutX="312.0" layoutY="545.0" text="SD" />
-                <Label layoutX="41.0" layoutY="233.0" text="Dan" />
-                <TextField id="brmjesece" fx:id="brdane" layoutX="140.0" layoutY="233.0" prefWidth="111.0" />
-                <TextField id="brmjesece" fx:id="bropise" layoutX="140.0" layoutY="279.0" prefWidth="111.0" />
-                <Label layoutX="46.0" layoutY="282.0" text="Opis" />
-                <Button fx:id="unosevidencija" layoutX="371.0" layoutY="274.0" mnemonicParsing="false" onAction="#pressButton" prefHeight="41.0" prefWidth="90.0" text="Unos" />
+                <Label layoutX="474.0" layoutY="155.0" text="Datum" />
+                <Label layoutX="56.0" layoutY="479.0" text="LEGENDA:" />
+                <Label layoutX="56.0" layoutY="530.0" text="Rad" />
+                <Label layoutX="56.0" layoutY="565.0" text="Blagdani i praznici" />
+                <Label layoutX="56.0" layoutY="600.0" text="Bolovanje" />
+                <Label layoutX="56.0" layoutY="631.0" text="Službeni put" />
+                <Label layoutX="56.0" layoutY="665.0" text="Ostalo (nd, pd, bo, go, i sl) " />
+                <Label layoutX="64.0" layoutY="699.0" text="Slobodan dan" />
+                <Label layoutX="321.0" layoutY="525.0" text="R" />
+                <Label layoutX="321.0" layoutY="560.0" text="P" />
+                <Label layoutX="321.0" layoutY="595.0" text="B" />
+                <Label layoutX="321.0" layoutY="631.0" text="SP" />
+                <Label layoutX="321.0" layoutY="665.0" text="OS" />
+                <Label layoutX="321.0" layoutY="699.0" text="SD" />
+                <TextField id="OpcijaEvidecija" fx:id="OpcijaEvidecija" layoutX="579.0" layoutY="208.0" prefWidth="111.0" />
+                <Label layoutX="479.0" layoutY="212.0" text="Opis" />
+                <Button fx:id="unosevidencija" layoutX="814.0" layoutY="247.0" mnemonicParsing="false" onAction="#TablicaEvidencijaUnos" prefHeight="21.0" prefWidth="90.0" text="Unos" />
+                        <TableView fx:id="tableEvidencija" layoutX="57.0" layoutY="52.0" prefHeight="395.0" prefWidth="368.0">
+                          <columns>
+                            <TableColumn fx:id="DatumEvidencijaStupac" prefWidth="151.0" text="Datum" />
+                            <TableColumn fx:id="OpisEvidencijaStupac" prefWidth="100.0" text="Opis" />
+                              <TableColumn fx:id="PotpisEvidencija" prefWidth="118.0" text="Potpis" />
+                          </columns>
+                        </TableView>
+                        <DatePicker fx:id="DatumEvidencija" layoutX="579.0" layoutY="153.0" prefHeight="39.0" prefWidth="187.0" />
               </children>
             </AnchorPane>
           </content>
