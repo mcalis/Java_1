@@ -34,7 +34,7 @@ public class Controller{
         // početno postavljanje današnjeg datuma
         datePickerZaposlenikMjesec.setValue(LocalDate.now());
 
-        //primjer postavljanje stupaca u tablicu
+        // postavljanje stupaca u tablicu
         DatumStupac.setCellValueFactory(
                 new PropertyValueFactory<>("Datum")
         );
@@ -51,7 +51,7 @@ public class Controller{
                 new PropertyValueFactory<>("potpisStupac")
         );
 
-        // ograničavanje odabira datuma do današnjeg dana
+        // ograničavanje odabira datuma za obavljeno Putovanje do današnjeg dana
         DatePicker maxDate = new DatePicker(); // DatePicker, used to define max date available, you can also create another for minimum date
         maxDate.setValue(LocalDate.now()); // Max date available will be 2015-01-01
         final Callback<DatePicker, DateCell> dayCellFactory;
@@ -134,6 +134,8 @@ public class Controller{
     Button buttonOcistiCelijeZaposlenik;
     @FXML
     Button buttonEksportPDF;
+    @FXML
+    Button buttonBrisanjePutovanje;
 
     //za evidenciju - Zadatak 2
     @FXML
@@ -155,6 +157,9 @@ public class Controller{
         textFieldKMdolazakPrijevoz.setDisable(true);
         textFieldSredstvoPrijevoz.setDisable(true);
         buttonUnosZaposlenika.setDisable(false);
+
+        listaPutovanjaPojedinogMjeseca.clear();
+        tablePrijevoz.setItems(listaPutovanjaPojedinogMjeseca);
     }
     /**
      * unos novog zaposlenika, te refresh tabličnog prikaza, koji je za novog zaposlenika prazan
@@ -198,7 +203,8 @@ public class Controller{
         textFieldImePrezimeZaposlenika.setText(trazeni.getImePrezimeZaposlenika());
         textFieldAdresaRada.setText(trazeni.getAdresaRada());
         textFieldAdresaStanovanja.setText(trazeni.getAdresaStanovanja());
-        datePickerFiltriranje();
+
+        datePickerFiltriranje(); // poziv metode koja s obzirom na odabrani mjesec prikazuje putovanja za taj mjesec
         unosPutovanja.setDisable(false);
         datePickerDatePrijevoz.setDisable(false);
         textFieldKModlazakPrijevoz.setDisable(false);
@@ -246,9 +252,9 @@ public class Controller{
      * */
    @FXML
    private void spremanjeprijevoza(){
-       if ( isInteger(textFieldKMdolazakPrijevoz.getText()) || isInteger(textFieldKModlazakPrijevoz.getText()) ||datePickerDatePrijevoz.getValue().equals(null) || textFieldSredstvoPrijevoz.getText().equalsIgnoreCase("")
+       if ( isInteger(textFieldKMdolazakPrijevoz.getText()) || isInteger(textFieldKModlazakPrijevoz.getText()) || datePickerDatePrijevoz.getValue() == null || textFieldSredstvoPrijevoz.getText().equalsIgnoreCase("")
                || (textFieldKModlazakPrijevoz.getText().equalsIgnoreCase("") && (textFieldKMdolazakPrijevoz.getText().equalsIgnoreCase("")) )){
-           System.out.println(textFieldKMdolazakPrijevoz.getText());
+
            upozorenje();
        }
        else{
@@ -257,61 +263,76 @@ public class Controller{
            Zaposlenik trazeni = listaZaposlenika.stream()
                    .filter(Zaposlenik -> odabraniZaposlenikString.equalsIgnoreCase(Zaposlenik.getImePrezimeZaposlenika())).findAny().orElse(null);
 
-           if (textFieldKMdolazakPrijevoz.getText().equalsIgnoreCase("")) {
-               Podacioprijevozu objektPodaciOPrijevozu = new Podacioprijevozu(datePickerDatePrijevoz.getValue(), null, Integer.parseInt(textFieldKModlazakPrijevoz.getText()), textFieldSredstvoPrijevoz.getText());
-               // dodaje jedno putovanje za zaposlenika koji se nalazi odabran - trenutni u textFieldu
-               trazeni.listaPutovanja.add(objektPodaciOPrijevozu);
-           }
-           else if (textFieldKModlazakPrijevoz.getText().equalsIgnoreCase("")) {
-               Podacioprijevozu objektPodaciOPrijevozu = new Podacioprijevozu(datePickerDatePrijevoz.getValue(), Integer.parseInt(textFieldKMdolazakPrijevoz.getText()), null, textFieldSredstvoPrijevoz.getText());
-               // dodaje jedno putovanje za zaposlenika koji se nalazi odabran - trenutni u textFieldu
-               trazeni.listaPutovanja.add(objektPodaciOPrijevozu);
+           if (trazeni == null){  //ako zaposlenik ne postoji u listi, nije još unesen
+               Alert alert= new Alert(Alert.AlertType.INFORMATION);
+               alert.setTitle("Upozorenje");
+               alert.setHeaderText("Zaposlenik ne postoji u listi !");
+               alert.setContentText("Dodajte prvo zaposlenika.");
+               alert.showAndWait().ifPresent(rs -> {
+               });
            }
            else {
-               Podacioprijevozu objektPodaciOPrijevozu = new Podacioprijevozu(datePickerDatePrijevoz.getValue(), Integer.parseInt(textFieldKMdolazakPrijevoz.getText()), Integer.parseInt(textFieldKModlazakPrijevoz.getText()), textFieldSredstvoPrijevoz.getText());
-               // dodaje jedno putovanje za zaposlenika koji se nalazi odabran - trenutni u textFieldu
-               trazeni.listaPutovanja.add(objektPodaciOPrijevozu);
-           }
-           // puni tablicu putovanja za odabranog zaposlenika i za odabrani mjesec
-            datePickerFiltriranje();
-           // brisanje textFielda nakon unosa
-           datePickerDatePrijevoz.getEditor().clear();
-           textFieldKMdolazakPrijevoz.clear();
-           textFieldKModlazakPrijevoz.clear();
-           textFieldSredstvoPrijevoz.clear();
-
-           // linije odavde pa do kraja metode su za prikaz poruke nakon dodanog putovanja, poruka samonestaje nakon 1.5 sec
-           Alert alert = new Alert(Alert.AlertType.INFORMATION);
-           alert.setTitle("Putovanje");
-           alert.setHeaderText("DODANO PUTOVANJE U "+datePickerDatePrijevoz.getValue().getMonthValue()+". MJESEC "+datePickerDatePrijevoz.getValue().getYear()+".");
-           Thread thread = new Thread(() -> {
-               try {
-                   // Wait for 5 secs
-                   Thread.sleep(1000);
-                   if (alert.isShowing()) {
-                       Platform.runLater(() -> alert.close());
-                   }
-               } catch (Exception exp) {
-                   exp.printStackTrace();
+               if (textFieldKMdolazakPrijevoz.getText().equalsIgnoreCase("")) {
+                   Podacioprijevozu objektPodaciOPrijevozu = new Podacioprijevozu(datePickerDatePrijevoz.getValue(), null, Integer.parseInt(textFieldKModlazakPrijevoz.getText()), textFieldSredstvoPrijevoz.getText());
+                   // dodaje jedno putovanje za zaposlenika koji se nalazi odabran - trenutni u textFieldu
+                   trazeni.listaPutovanja.add(objektPodaciOPrijevozu);
                }
-           });
-           thread.setDaemon(true);
-           thread.start();
-           Optional<ButtonType> result = alert.showAndWait();
+               else if (textFieldKModlazakPrijevoz.getText().equalsIgnoreCase("")) {
+                   Podacioprijevozu objektPodaciOPrijevozu = new Podacioprijevozu(datePickerDatePrijevoz.getValue(), Integer.parseInt(textFieldKMdolazakPrijevoz.getText()), null, textFieldSredstvoPrijevoz.getText());
+                   // dodaje jedno putovanje za zaposlenika koji se nalazi odabran - trenutni u textFieldu
+                   trazeni.listaPutovanja.add(objektPodaciOPrijevozu);
+               }
+               else {
+                   Podacioprijevozu objektPodaciOPrijevozu = new Podacioprijevozu(datePickerDatePrijevoz.getValue(), Integer.parseInt(textFieldKMdolazakPrijevoz.getText()), Integer.parseInt(textFieldKModlazakPrijevoz.getText()), textFieldSredstvoPrijevoz.getText());
+                   // dodaje jedno putovanje za zaposlenika koji se nalazi odabran - trenutni u textFieldu
+                   trazeni.listaPutovanja.add(objektPodaciOPrijevozu);
+               }
+               // puni tablicu putovanja za odabranog zaposlenika i za odabrani mjesec
+               datePickerFiltriranje();
+               // brisanje textFielda nakon unosa
+               datePickerDatePrijevoz.getEditor().clear();
+               textFieldKMdolazakPrijevoz.clear();
+               textFieldKModlazakPrijevoz.clear();
+               textFieldSredstvoPrijevoz.clear();
+
+               // linije odavde pa do kraja metode su za prikaz poruke nakon dodanog putovanja, poruka samonestaje nakon 1.5 sec
+               Alert alert = new Alert(Alert.AlertType.INFORMATION);
+               alert.setTitle("Putovanje");
+               alert.setHeaderText("DODANO PUTOVANJE U "+datePickerDatePrijevoz.getValue().getMonthValue()+". MJESEC "+datePickerDatePrijevoz.getValue().getYear()+".");
+               Thread thread = new Thread(() -> {
+                   try {
+                       // Wait for 5 secs
+                       Thread.sleep(1000);
+                       if (alert.isShowing()) {
+                           Platform.runLater(() -> alert.close());
+                       }
+                   } catch (Exception exp) {
+                       exp.printStackTrace();
+                   }
+               });
+               thread.setDaemon(true);
+               thread.start();
+               Optional<ButtonType> result = alert.showAndWait();
+           }
+
        }
     }
-    // metoda koja rukuje promjenom selekcije datuma u gornjem datePickeru, za odabrani datum vraca mjesec, te za odabrani mjesec pokazuje putovanja zaposlenika, ova metoda poziva se i u ostalim metodama kao refresh prikaza tablice.
-    // Dijelovi metode rabe se dohvaćanje željenog zaposlenika i mjeseca, na drugim mjestima u kodu.
+    /**
+     *  metoda koja rukuje promjenom selekcije datuma u gornjem datePickeru, za odabrani datum vraca mjesec, te za vraceni mjesec pokazuje putovanja zaposlenika, ova metoda poziva se i u ostalim metodama kao refresh prikaza tablice.
+     *  Dijelovi metode rabe se dohvaćanje željenog zaposlenika i mjeseca, na drugim mjestima u kodu.
+     */
     @FXML
     private void datePickerFiltriranje (){
-        if (textFieldImePrezimeZaposlenika.getText().equalsIgnoreCase("") || textFieldAdresaStanovanja.getText().equalsIgnoreCase("") || textFieldAdresaRada.getText().equalsIgnoreCase("") || listaZaposlenika.isEmpty()){
+       String odabraniZaposlenikString = textFieldImePrezimeZaposlenika.getText();
+       Zaposlenik trazeni = listaZaposlenika.stream()
+                .filter(Zaposlenik -> odabraniZaposlenikString.equalsIgnoreCase(Zaposlenik.getImePrezimeZaposlenika())).findAny().orElse(null);
+        if (textFieldImePrezimeZaposlenika.getText().equalsIgnoreCase("") || textFieldAdresaStanovanja.getText().equalsIgnoreCase("") || textFieldAdresaRada.getText().equalsIgnoreCase("") || listaZaposlenika.isEmpty()
+                || trazeni ==null )
+        {
             upozorenje();
         }
         else {
             listaPutovanjaPojedinogMjeseca.clear();
-            String odabraniZaposlenikString = textFieldImePrezimeZaposlenika.getText();
-            Zaposlenik trazeni = listaZaposlenika.stream()
-                    .filter(Zaposlenik -> odabraniZaposlenikString.equalsIgnoreCase(Zaposlenik.getImePrezimeZaposlenika())).findAny().orElse(null);
 
             Integer mjesecBroj = datePickerZaposlenikMjesec.getValue().getMonthValue();
             Integer godinaBroj = datePickerZaposlenikMjesec.getValue().getYear();
@@ -322,6 +343,25 @@ public class Controller{
             tablePrijevoz.setItems(listaPutovanjaPojedinogMjeseca);
         }
     }
+    @FXML
+    private void brisanjeJednogSelektiranogPutovanja () {
+        Podacioprijevozu selektiranoPutovanje = tablePrijevoz.getSelectionModel().getSelectedItem();
+        if (textFieldImePrezimeZaposlenika.getText().equalsIgnoreCase("") || textFieldAdresaStanovanja.getText().equalsIgnoreCase("") || textFieldAdresaRada.getText().equalsIgnoreCase("") || listaZaposlenika.isEmpty()
+             || selektiranoPutovanje == null   )
+        {
+            upozorenje();
+        }
+        else {
+            String odabraniZaposlenikString = textFieldImePrezimeZaposlenika.getText();
+            Zaposlenik trazeni = listaZaposlenika.stream()
+                    .filter(Zaposlenik -> odabraniZaposlenikString.equalsIgnoreCase(Zaposlenik.getImePrezimeZaposlenika())).findAny().orElse(null);
+
+            trazeni.listaPutovanja.remove(selektiranoPutovanje);
+
+            datePickerFiltriranje();
+        }
+    }
+
     /**
      * -------------------------------   2. zadatak ---spremanje podataka evidencija kad kliknemo gumb ----------------------------------------------------------------------------------------------
      */
@@ -336,84 +376,87 @@ public class Controller{
             System.out.println("enter");
         }
     }
+
     @FXML
     public void eksportPDF(){
-        if (textFieldImePrezimeZaposlenika.getText().equalsIgnoreCase("") || textFieldAdresaStanovanja.getText().equalsIgnoreCase("") || textFieldAdresaRada.getText().equalsIgnoreCase("") || listaZaposlenika.isEmpty()){
+        String odabraniZaposlenikString = textFieldImePrezimeZaposlenika.getText();
+        Zaposlenik trazeni = listaZaposlenika.stream()
+                .filter(Zaposlenik -> odabraniZaposlenikString.equalsIgnoreCase(Zaposlenik.getImePrezimeZaposlenika())).findAny().orElse(null);
+        if (textFieldImePrezimeZaposlenika.getText().equalsIgnoreCase("") || textFieldAdresaStanovanja.getText().equalsIgnoreCase("") || textFieldAdresaRada.getText().equalsIgnoreCase("") || listaZaposlenika.isEmpty()
+                || trazeni == null)
+        {
             upozorenje();
         }
         else {
-            listaPutovanjaPojedinogMjeseca.clear();
-            String odabraniZaposlenikString = textFieldImePrezimeZaposlenika.getText();
-            Zaposlenik trazeni = listaZaposlenika.stream()
-                    .filter(Zaposlenik -> odabraniZaposlenikString.equalsIgnoreCase(Zaposlenik.getImePrezimeZaposlenika())).findAny().orElse(null);
-
-
-            Integer mjesecBroj = datePickerZaposlenikMjesec.getValue().getMonthValue();
-            Integer godinaBroj = datePickerZaposlenikMjesec.getValue().getYear();
-            String nazivMjeseca = new mjesecUhrvatski().pretvoriHR(datePickerZaposlenikMjesec.getValue().getMonth().toString());
-
-
-            for (Podacioprijevozu pod : trazeni.listaPutovanja) {
-                if (pod.Datum.getMonthValue() == mjesecBroj && pod.Datum.getYear() == godinaBroj)
-                    listaPutovanjaPojedinogMjeseca.add(pod);
-            }
-            tablePrijevoz.setItems(listaPutovanjaPojedinogMjeseca);
-
-            // prema dolje je eksport u PDF
-            Document noviDokument = new Document();
-            String imeDatotekePDF = "EvidencijaPrijevoz.pdf";
-            try {
-                PdfWriter.getInstance(noviDokument, new FileOutputStream(imeDatotekePDF));
-                noviDokument.open();
-                noviDokument.add(new Paragraph("EVIDENCIJA PUTOVANJA ---------------------------------"));
-                noviDokument.add(Chunk.NEWLINE);
-                noviDokument.add(new Paragraph("Ime i Prezime: " + trazeni.getImePrezimeZaposlenika()));
-                noviDokument.add(new Paragraph("Adresa rada: " + trazeni.getAdresaRada()));
-                noviDokument.add(new Paragraph("Adresa stanovanja: " + trazeni.getAdresaStanovanja()));
-                noviDokument.add(Chunk.NEWLINE);
-
-                PdfPTable tablicaPDF = new PdfPTable(4);
-                tablicaPDF.addCell("Datum u mjesecu " + nazivMjeseca + " " + godinaBroj);
-                tablicaPDF.addCell("Kilometri dolazak");
-                tablicaPDF.addCell("Kilometri odlazak");
-                tablicaPDF.addCell("Prijevozno sredstvo");
-
-                Integer sumaDolazakKM = 0; // suma kilometara u dolasku
-                Integer sumaOdlazakKM = 0; // suma kilometara u odlasku
-
-                for (Podacioprijevozu pod : listaPutovanjaPojedinogMjeseca) {
-                    Integer dan = pod.getDatum().getDayOfMonth();
-                    tablicaPDF.addCell(dan.toString() + ".");
-                    if (pod.brojKmDolazak == null) tablicaPDF.addCell("");
-                    else {
-                        tablicaPDF.addCell(pod.brojKmDolazak.toString());
-                        sumaDolazakKM += pod.brojKmDolazak;
-                    }
-                    if (pod.brojKmOdlazak == null) tablicaPDF.addCell("");
-                    else {
-                        tablicaPDF.addCell(pod.brojKmOdlazak.toString());
-                        sumaOdlazakKM += pod.brojKmOdlazak;
-                    }
-                    tablicaPDF.addCell(pod.getPrijevoznoSredstvo());
+                if (listaPutovanjaPojedinogMjeseca.isEmpty()) {  // ispis poruke ako nema ni jedno putovanje za odabrani mjesec
+                    Alert alert= new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Upozorenje");
+                    alert.setHeaderText("Ne postoji ni jedno putovanje za odabrani mjesec");
+                    alert.setContentText("Unesite putovanje.");
+                    alert.showAndWait().ifPresent(rs -> {
+                    });
                 }
-                tablicaPDF.addCell(" ");
-                tablicaPDF.addCell(" ");
-                tablicaPDF.addCell(" ");
-                tablicaPDF.addCell(" ");
-                tablicaPDF.addCell(" ");
-                tablicaPDF.addCell("1.");
-                tablicaPDF.addCell("2.");
-                tablicaPDF.addCell("1. + 2.");
-                tablicaPDF.addCell("UKUPNO:");
-                tablicaPDF.addCell(sumaDolazakKM.toString());
-                tablicaPDF.addCell(sumaOdlazakKM.toString());
-                Integer ukupnoPutMjesec = sumaDolazakKM + sumaOdlazakKM;
-                tablicaPDF.addCell(ukupnoPutMjesec.toString());
-                noviDokument.add(tablicaPDF);
-                noviDokument.close();
-            } catch (Exception e) {
-                System.err.println(e);
-            }
+                else {
+                    Integer mjesecBroj = datePickerZaposlenikMjesec.getValue().getMonthValue();
+                    Integer godinaBroj = datePickerZaposlenikMjesec.getValue().getYear();
+                    String nazivMjeseca = new mjesecUhrvatski().pretvoriHR(datePickerZaposlenikMjesec.getValue().getMonth().toString());
+
+                    // prema dolje je eksport u PDF
+                    Document noviDokument = new Document();
+                    String imeDatotekePDF = "EvidencijaPrijevoz.pdf";
+                    try {
+                        PdfWriter.getInstance(noviDokument, new FileOutputStream(imeDatotekePDF));
+                        noviDokument.open();
+                        noviDokument.add(new Paragraph("EVIDENCIJA PUTOVANJA ---------------------------------"));
+                        noviDokument.add(Chunk.NEWLINE);
+                        noviDokument.add(new Paragraph("Ime i Prezime: " + trazeni.getImePrezimeZaposlenika()));
+                        noviDokument.add(new Paragraph("Adresa rada: " + trazeni.getAdresaRada()));
+                        noviDokument.add(new Paragraph("Adresa stanovanja: " + trazeni.getAdresaStanovanja()));
+                        noviDokument.add(Chunk.NEWLINE);
+
+                        PdfPTable tablicaPDF = new PdfPTable(4);
+                        tablicaPDF.addCell("Datum u mjesecu " + nazivMjeseca + " " + godinaBroj);
+                        tablicaPDF.addCell("Kilometri dolazak");
+                        tablicaPDF.addCell("Kilometri odlazak");
+                        tablicaPDF.addCell("Prijevozno sredstvo");
+
+                        Integer sumaDolazakKM = 0; // suma kilometara u dolasku
+                        Integer sumaOdlazakKM = 0; // suma kilometara u odlasku
+
+                        for (Podacioprijevozu pod : listaPutovanjaPojedinogMjeseca) {
+                            Integer dan = pod.getDatum().getDayOfMonth();
+                            tablicaPDF.addCell(dan.toString() + ".");
+                            if (pod.brojKmDolazak == null) tablicaPDF.addCell("");
+                            else {
+                                tablicaPDF.addCell(pod.brojKmDolazak.toString());
+                                sumaDolazakKM += pod.brojKmDolazak;
+                            }
+                            if (pod.brojKmOdlazak == null) tablicaPDF.addCell("");
+                            else {
+                                tablicaPDF.addCell(pod.brojKmOdlazak.toString());
+                                sumaOdlazakKM += pod.brojKmOdlazak;
+                            }
+                            tablicaPDF.addCell(pod.getPrijevoznoSredstvo());
+                        }
+                        tablicaPDF.addCell(" ");
+                        tablicaPDF.addCell(" ");
+                        tablicaPDF.addCell(" ");
+                        tablicaPDF.addCell(" ");
+                        tablicaPDF.addCell(" ");
+                        tablicaPDF.addCell("1.");
+                        tablicaPDF.addCell("2.");
+                        tablicaPDF.addCell("1. + 2.");
+                        tablicaPDF.addCell("UKUPNO:");
+                        tablicaPDF.addCell(sumaDolazakKM.toString());
+                        tablicaPDF.addCell(sumaOdlazakKM.toString());
+                        Integer ukupnoPutMjesec = sumaDolazakKM + sumaOdlazakKM;
+                        tablicaPDF.addCell(ukupnoPutMjesec.toString());
+                        noviDokument.add(tablicaPDF);
+                        noviDokument.close();
+                    } catch (Exception e) {
+                        System.err.println(e);
+                    }
+                }
         }
     }
 }
