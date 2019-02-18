@@ -595,6 +595,24 @@ public class Controller{
         }
     }
 
+    @FXML
+    private void brisanjeJednogSelektiranogEvidencvija () {
+        String odabraniZaposlenikString = textFieldImePrezimeZaposlenika.getText();
+        Zaposlenik trazeni = listaZaposlenika.stream()
+                .filter(Zaposlenik -> odabraniZaposlenikString.equalsIgnoreCase(Zaposlenik.getImePrezimeZaposlenika())).findAny().orElse(null);
+        EvidencijaPodaci selektiranoPutovanje = tableEvidencija.getSelectionModel().getSelectedItem();
+        if (textFieldImePrezimeZaposlenika.getText().equalsIgnoreCase("") || textFieldAdresaStanovanja.getText().equalsIgnoreCase("") || textFieldAdresaRada.getText().equalsIgnoreCase("") || listaZaposlenika.isEmpty()
+                || selektiranoPutovanje == null  || trazeni == null )
+        {
+            upozorenje();
+        }
+        else {
+            trazeni.listaEvidencija.remove(selektiranoPutovanje);
+            EvidencijaTrenutacnalista.remove(selektiranoPutovanje);
+            datePickerFiltriranje();
+        }
+    }
+
 
 
 }

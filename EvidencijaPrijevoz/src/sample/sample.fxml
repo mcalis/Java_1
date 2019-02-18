@@ -102,7 +102,8 @@
                           </columns>
                         </TableView>
                         <DatePicker fx:id="DatumEvidencija" layoutX="579.0" layoutY="153.0" prefHeight="39.0" prefWidth="187.0" />
-                        <Button fx:id="PDFEvidencija" onAction="#eksportPDFEvidencija" layoutX="814.0" layoutY="300.0" mnemonicParsing="false" text="PDF" />
+                        <Button fx:id="PDFEvidencija" layoutX="557.0" layoutY="408.0" mnemonicParsing="false" onAction="#eksportPDFEvidencija" text="PDF" />
+                        <Button fx:id="EvidencijaDeleste" onAction="#brisanjeJednogSelektiranogEvidencvija" layoutX="450.0" layoutY="408.0" mnemonicParsing="false" text="Delete" />
               </children>
             </AnchorPane>
           </content>
