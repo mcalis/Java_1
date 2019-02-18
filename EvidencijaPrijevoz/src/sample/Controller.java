@@ -92,9 +92,7 @@ public class Controller{
     // pomocna lista stringova za comboBox
     private ObservableList<String> listaImena = FXCollections.observableArrayList();
 
-    //za prijevoznoSredstvo
     //tablica
-    FXMLLoader loader = new FXMLLoader(Controller.class.getResource("C:\\Users\\David\\Desktop\\EvidencijaPrijevoz\\src\\sample\\sample.fxml"));
     @FXML
     TableView<Podacioprijevozu> tablePrijevoz;
     @FXML
@@ -296,8 +294,8 @@ public class Controller{
                alert.setHeaderText("DODANO PUTOVANJE U "+datePickerDatePrijevoz.getValue().getMonthValue()+". MJESEC "+datePickerDatePrijevoz.getValue().getYear()+".");
                Thread thread = new Thread(() -> {
                    try {
-                       // Wait for 5 secs
-                       Thread.sleep(1000);
+                       // Ceka 1 sekundu, zatim se zatvara
+                       Thread.sleep(900);
                        if (alert.isShowing()) {
                            Platform.runLater(() -> alert.close());
                        }
@@ -388,18 +386,19 @@ public class Controller{
                 try {
                     PdfWriter.getInstance(noviDokument, new FileOutputStream(imeDatotekePDF));
                     noviDokument.open();
-                    noviDokument.add(new Paragraph("EVIDENCIJA PUTOVANJA ---------------------------------"));
+                    noviDokument.add(new Paragraph("IZVJESCE O PRIJEDENOJ UDALJENOSTI PRI DOLASKU NA POSAO I ODLASKU S POSLA"));
                     noviDokument.add(Chunk.NEWLINE);
                     noviDokument.add(new Paragraph("Ime i Prezime: " + trazeni.getImePrezimeZaposlenika()));
                     noviDokument.add(new Paragraph("Adresa rada: " + trazeni.getAdresaRada()));
                     noviDokument.add(new Paragraph("Adresa stanovanja: " + trazeni.getAdresaStanovanja()));
                     noviDokument.add(Chunk.NEWLINE);
 
-                    PdfPTable tablicaPDF = new PdfPTable(4);
+                    PdfPTable tablicaPDF = new PdfPTable(5);
                     tablicaPDF.addCell("Datum u mjesecu " + nazivMjeseca + " " + godinaBroj);
                     tablicaPDF.addCell("Kilometri dolazak");
                     tablicaPDF.addCell("Kilometri odlazak");
                     tablicaPDF.addCell("Prijevozno sredstvo");
+                    tablicaPDF.addCell("Potpis");
 
                     Integer sumaDolazakKM = 0; // suma kilometara u dolasku
                     Integer sumaOdlazakKM = 0; // suma kilometara u odlasku
@@ -418,7 +417,9 @@ public class Controller{
                             sumaOdlazakKM += pod.brojKmOdlazak;
                         }
                         tablicaPDF.addCell(pod.getPrijevoznoSredstvo());
+                        tablicaPDF.addCell("");
                     }
+                    tablicaPDF.addCell(" ");
                     tablicaPDF.addCell(" ");
                     tablicaPDF.addCell(" ");
                     tablicaPDF.addCell(" ");
@@ -426,13 +427,29 @@ public class Controller{
                     tablicaPDF.addCell(" ");
                     tablicaPDF.addCell("1.");
                     tablicaPDF.addCell("2.");
+                    tablicaPDF.addCell(" ");
                     tablicaPDF.addCell("1. + 2.");
                     tablicaPDF.addCell("UKUPNO:");
                     tablicaPDF.addCell(sumaDolazakKM.toString());
                     tablicaPDF.addCell(sumaOdlazakKM.toString());
+                    tablicaPDF.addCell(" ");
                     Integer ukupnoPutMjesec = sumaDolazakKM + sumaOdlazakKM;
                     tablicaPDF.addCell(ukupnoPutMjesec.toString());
                     noviDokument.add(tablicaPDF);
+
+                    noviDokument.add(Chunk.NEWLINE);
+                    Integer danDanasnji = LocalDate.now().getDayOfMonth();
+                    noviDokument.add(new Paragraph("DATUM PODNOSENJA IZVJESCA: "+danDanasnji.toString()+"."+LocalDate.now().getMonthValue()+"."+LocalDate.now().getYear()));
+                    noviDokument.add(new Paragraph("Naknada po prijedenom kilometru: 1 kn "));
+                    noviDokument.add(new Paragraph("Na ime naknade troska prijevoza potražuje se: "+ ukupnoPutMjesec+" kn"));
+                    noviDokument.add(new Paragraph("_____________________________________________________________________"));
+                    noviDokument.add(Chunk.NEWLINE);
+                    noviDokument.add(new Paragraph("Potpis zaposlenika:_______________________________________"));
+                    noviDokument.add(Chunk.NEWLINE);
+                    noviDokument.add(new Paragraph("Odobreni iznos za isplatu:_________________________kn"));
+                    noviDokument.add(Chunk.NEWLINE);
+                    noviDokument.add(new Paragraph("Za Ustanovu odobrava (potpis):_______________________________________"));
+
                     noviDokument.close();
                 } catch (Exception e) {
                     System.err.println(e);
@@ -492,9 +509,6 @@ public class Controller{
         EvidencijaTrenutacnalista.add(EP);
         tableEvidencija.setItems(trazeni.listaEvidencija);
     }
-
-
-
     @FXML
     private void TablicaEvidencijaUnos(ActionEvent event){
         if ( DatumEvidencija.getValue() == null || OpcijaEvidecija.getText().equalsIgnoreCase("")){
