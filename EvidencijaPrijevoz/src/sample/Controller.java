@@ -466,22 +466,16 @@ public class Controller{
     DatePicker DatumEvidencija;
     @FXML
     Button unosevidencija;
+    @FXML
+    Button PDFEvidencija;
+
+    public  ObservableList<EvidencijaPodaci> EvidencijaTrenutacnalista= FXCollections.observableArrayList();
 
 
-
-    private ObservableList<EvidencijaPodaci> getEvidencija(){
-        ObservableList<EvidencijaPodaci> ListaPodaciEvidencija = FXCollections.observableArrayList();
-
-        ListaPodaciEvidencija.add(new EvidencijaPodaci(DatumEvidencija.getValue(), OpcijaEvidecija.getText()));
-
-        return ListaPodaciEvidencija;
-    }
 
     @FXML
     public void initializeEvidencija () {
 
-
-        // postavljanje stupaca u tablicu
         DatumEvidencijaStupac.setCellValueFactory(
                 new PropertyValueFactory<EvidencijaPodaci, LocalDate>("Datumevidencija")
         );
@@ -489,8 +483,14 @@ public class Controller{
                 new PropertyValueFactory<EvidencijaPodaci, String>("Opcija")
         );
 
-        tableEvidencija.setItems(getEvidencija());
+        String odabraniZaposlenikString = textFieldImePrezimeZaposlenika.getText();
+        Zaposlenik trazeni = listaZaposlenika.stream()
+                .filter(Zaposlenik -> odabraniZaposlenikString.equalsIgnoreCase(Zaposlenik.getImePrezimeZaposlenika())).findAny().orElse(null);
 
+        EvidencijaPodaci EP =new EvidencijaPodaci(DatumEvidencija.getValue(), OpcijaEvidecija.getText());
+        trazeni.listaEvidencija.add(EP);
+        EvidencijaTrenutacnalista.add(EP);
+        tableEvidencija.setItems(trazeni.listaEvidencija);
     }
 
 
@@ -500,15 +500,87 @@ public class Controller{
         if ( DatumEvidencija.getValue() == null || OpcijaEvidecija.getText().equalsIgnoreCase("")){
             upozorenje();
         }else{
-            EvidencijaPodaci EP= new EvidencijaPodaci(DatumEvidencija.getValue(), OpcijaEvidecija.getText());
+            String odabraniZaposlenikString = textFieldImePrezimeZaposlenika.getText();
+            Zaposlenik trazeni = listaZaposlenika.stream()
+                    .filter(Zaposlenik -> odabraniZaposlenikString.equalsIgnoreCase(Zaposlenik.getImePrezimeZaposlenika())).findAny().orElse(null);
 
-            initializeEvidencija();
+            if (trazeni == null){  //ako zaposlenik ne postoji u listi, nije još unesen
+                Alert alert= new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Upozorenje");
+                alert.setHeaderText("Zaposlenik ne postoji u listi !");
+                alert.setContentText("Dodajte prvo zaposlenika.");
+                alert.showAndWait().ifPresent(rs -> {
+                });
+            }
+            else {
 
-            DatumEvidencija.getEditor().clear();
-            OpcijaEvidecija.clear();
+                initializeEvidencija();
+                DatumEvidencija.getEditor().clear();
+                OpcijaEvidecija.clear();
+
+                }
+        }
+    }
+
+
+    @FXML
+    public void eksportPDFEvidencija(){
+        String odabraniZaposlenikString = textFieldImePrezimeZaposlenika.getText();
+        Zaposlenik trazeni = listaZaposlenika.stream()
+                .filter(Zaposlenik -> odabraniZaposlenikString.equalsIgnoreCase(Zaposlenik.getImePrezimeZaposlenika())).findAny().orElse(null);
+            if (EvidencijaTrenutacnalista.isEmpty()) {  // ispis poruke ako nema ni jedno putovanje za odabrani mjesec
+                Alert alert= new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Upozorenje");
+                alert.setHeaderText("Ne postoji ni jedno putovanje za odabrani mjesec");
+                alert.setContentText("Unesite putovanje.");
+                alert.showAndWait().ifPresent(rs -> {
+                });
+            }
+            else {
+                Integer mjesecBroj = DatumEvidencija.getValue().getMonthValue();
+                Integer godinaBroj = DatumEvidencija.getValue().getYear();
+                String nazivMjeseca = new mjesecUhrvatski().pretvoriHR(DatumEvidencija.getValue().getMonth().toString());
+
+                // prema dolje je eksport u PDF
+                Document noviDokument = new Document();
+                String imeDatotekePDF = "EvidencijaEvidencija.pdf";
+                try {
+                    PdfWriter.getInstance(noviDokument, new FileOutputStream(imeDatotekePDF));
+                    noviDokument.open();
+                    noviDokument.add(new Paragraph("EVIDENCIJA Evidencija ---------------------------------"));
+                    noviDokument.add(Chunk.NEWLINE);
+                    noviDokument.add(new Paragraph("Ime i Prezime: " + trazeni.getImePrezimeZaposlenika()));
+                    noviDokument.add(new Paragraph("Adresa rada: " + trazeni.getAdresaRada()));
+                    noviDokument.add(new Paragraph("Adresa stanovanja: " + trazeni.getAdresaStanovanja()));
+                    noviDokument.add(Chunk.NEWLINE);
+
+                    PdfPTable tablicaPDF = new PdfPTable(3);
+                    tablicaPDF.addCell("Datum u mjesecu " + nazivMjeseca + " " + godinaBroj);
+                    tablicaPDF.addCell("Opis");
+                    tablicaPDF.addCell("Potpis");
+
+
+                    for (EvidencijaPodaci pod : EvidencijaTrenutacnalista){
+
+                        Integer dan = pod.getDatumevidencija().getDayOfMonth();
+                        tablicaPDF.addCell(dan.toString() + ".");
+                        if (pod.Opcija == null) tablicaPDF.addCell("");
+                        else{
+                            tablicaPDF.addCell(pod.Opcija.toString());
+                        }
+                        tablicaPDF.addCell(pod.Potpis);
+
+
+                    }
+                    noviDokument.add(tablicaPDF);
+                    noviDokument.close();
+                } catch (Exception e) {
+                    System.err.println(e);
+                }
 
         }
     }
+
 
 
 }

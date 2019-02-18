@@ -14,6 +14,12 @@ public class Zaposlenik {
      */
     public ObservableList<Podacioprijevozu> listaPutovanja= FXCollections.observableArrayList();
 
+
+    /**
+     * listaEvidencija sadrži svu evidenciju
+    */
+    public  ObservableList<EvidencijaPodaci> listaEvidencija= FXCollections.observableArrayList();
+
     public Zaposlenik(String imePrezimeZaposlenika, String adresaRada, String adresaStanovanja) {
         this.imePrezimeZaposlenika = imePrezimeZaposlenika;
         this.adresaRada = adresaRada;
