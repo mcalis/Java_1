@@ -454,6 +454,23 @@ public class Controller{
                 } catch (Exception e) {
                     System.err.println(e);
                 }
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("PDF");
+                alert.setHeaderText("GENERIRAN PDF ZA "+datePickerDatePrijevoz.getValue().getMonthValue()+". MJESEC "+datePickerDatePrijevoz.getValue().getYear()+".");
+                Thread thread = new Thread(() -> {
+                    try {
+                        // Ceka 1 sekundu, zatim se zatvara
+                        Thread.sleep(1400);
+                        if (alert.isShowing()) {
+                            Platform.runLater(() -> alert.close());
+                        }
+                    } catch (Exception exp) {
+                        exp.printStackTrace();
+                    }
+                });
+                thread.setDaemon(true);
+                thread.start();
+                Optional<ButtonType> result = alert.showAndWait();
             }
         }
     }
