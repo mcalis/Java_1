@@ -217,6 +217,7 @@ public class Controller{
         textFieldKModlazakPrijevoz.setDisable(false);
         textFieldKMdolazakPrijevoz.setDisable(false);
         textFieldSredstvoPrijevoz.setDisable(false);
+        datePickerFiltriranjeEvidencija();
     }
     /**
      * Ispis okvira s upozorenjem
