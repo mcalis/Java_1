@@ -81,6 +81,20 @@ public class Controller{
             }
         };
         datePickerZaposlenikMjesec.setDayCellFactory((dayCellFactoryOdabirMjeseca));  // ograničenje odabira dana u mjesecu na 15. u mjesecu, malo je intuitivnije :)
+
+        // ograničenje odabira dana u mjesecu na 15. u mjesecu, malo je intuitivnije :)
+        final Callback<DatePicker, DateCell> dayCellFactoryOdabirMjesecaZaEvidenciju;
+        dayCellFactoryOdabirMjesecaZaEvidenciju = (final DatePicker datePicker) -> new DateCell() {
+            @Override
+            public void updateItem(LocalDate item, boolean empty) {
+                super.updateItem(item, empty);
+                if (item.getDayOfMonth() <15 || item.getDayOfMonth() >15 ) {
+                    setDisable(true);
+                    setStyle("-fx-background-color: #ffc0cb;"); //To set background on different color
+                }
+            }
+        };
+        OdabirmjesecaEvidencija.setDayCellFactory((dayCellFactoryOdabirMjesecaZaEvidenciju));  // ograničenje odabira dana u mjesecu na 15. u mjesecu, malo je intuitivnije :)
     }
     /**
      * U listu listaZaposlenika spremaju se svi Zaposlenici
@@ -526,13 +540,10 @@ public class Controller{
 
         EvidencijaPodaci EP =new EvidencijaPodaci(DatumEvidencija.getValue(), OpcijaEvidecija.getText());
         trazeni.listaEvidencija.add(EP);
-
-
-
-
         OdabirmjesecaEvidencija.setValue(LocalDate.now());
-
         tableEvidencija.setItems(EvidencijaPosljednjiMjesec);
+
+
     }
 
     @FXML
