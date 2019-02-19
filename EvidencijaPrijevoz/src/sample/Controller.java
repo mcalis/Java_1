@@ -528,6 +528,10 @@ public class Controller{
         trazeni.listaEvidencija.add(EP);
 
 
+
+
+        OdabirmjesecaEvidencija.setValue(LocalDate.now());
+
         tableEvidencija.setItems(EvidencijaPosljednjiMjesec);
     }
 
@@ -547,6 +551,7 @@ public class Controller{
             for (EvidencijaPodaci pod: trazeni.listaEvidencija) {
                 if (pod.Datumevidencija.getMonthValue() == mjesecBroj && pod.Datumevidencija.getYear()== godinaBroj) EvidencijaPosljednjiMjesec.add(pod);
             }
+
             tableEvidencija.setItems(EvidencijaPosljednjiMjesec);
         }
     }
@@ -577,6 +582,7 @@ public class Controller{
                 initializeEvidencija();
                 DatumEvidencija.getEditor().clear();
                 OpcijaEvidecija.clear();
+                datePickerFiltriranjeEvidencija();
 
                 }
         }
@@ -655,6 +661,7 @@ public class Controller{
         else {
             trazeni.listaEvidencija.remove(selektiranoPutovanje);
             datePickerFiltriranje();
+            datePickerFiltriranjeEvidencija();
         }
     }
 
