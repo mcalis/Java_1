@@ -103,7 +103,8 @@
                         </TableView>
                         <DatePicker fx:id="DatumEvidencija" layoutX="579.0" layoutY="153.0" prefHeight="39.0" prefWidth="187.0" />
                         <Button fx:id="PDFEvidencija" layoutX="557.0" layoutY="408.0" mnemonicParsing="false" onAction="#eksportPDFEvidencija" text="PDF" />
-                        <Button fx:id="EvidencijaDeleste" onAction="#brisanjeJednogSelektiranogEvidencvija" layoutX="450.0" layoutY="408.0" mnemonicParsing="false" text="Delete" />
+                        <Button fx:id="EvidencijaDeleste" layoutX="450.0" layoutY="408.0" mnemonicParsing="false" onAction="#brisanjeJednogSelektiranogEvidencvija" text="Delete" />
+                        <DatePicker fx:id="OdabirmjesecaEvidencija" layoutX="450.0" layoutY="460.0" onAction="#datePickerFiltriranjeEvidencija"  prefHeight="39.0" prefWidth="164.0" />
               </children>
             </AnchorPane>
           </content>

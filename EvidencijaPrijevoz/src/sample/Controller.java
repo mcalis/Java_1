@@ -502,8 +502,11 @@ public class Controller{
     Button unosevidencija;
     @FXML
     Button PDFEvidencija;
+    @FXML
+    DatePicker OdabirmjesecaEvidencija;
 
-    public  ObservableList<EvidencijaPodaci> EvidencijaTrenutacnalista= FXCollections.observableArrayList();
+
+    private ObservableList<EvidencijaPodaci> EvidencijaPosljednjiMjesec = FXCollections.observableArrayList();
 
 
 
@@ -523,9 +526,35 @@ public class Controller{
 
         EvidencijaPodaci EP =new EvidencijaPodaci(DatumEvidencija.getValue(), OpcijaEvidecija.getText());
         trazeni.listaEvidencija.add(EP);
-        EvidencijaTrenutacnalista.add(EP);
-        tableEvidencija.setItems(trazeni.listaEvidencija);
+
+
+        tableEvidencija.setItems(EvidencijaPosljednjiMjesec);
     }
+
+    @FXML
+    private void datePickerFiltriranjeEvidencija (){
+        String odabraniZaposlenikString = textFieldImePrezimeZaposlenika.getText();
+        Zaposlenik trazeni = listaZaposlenika.stream()
+                .filter(Zaposlenik -> odabraniZaposlenikString.equalsIgnoreCase(Zaposlenik.getImePrezimeZaposlenika())).findAny().orElse(null);
+        if ( textFieldImePrezimeZaposlenika.getText().equalsIgnoreCase("") || textFieldAdresaStanovanja.getText().equalsIgnoreCase("") || textFieldAdresaRada.getText().equalsIgnoreCase("")){
+            upozorenje();
+        }else{
+            EvidencijaPosljednjiMjesec.clear();
+
+            Integer mjesecBroj = OdabirmjesecaEvidencija.getValue().getMonthValue();
+            Integer godinaBroj = OdabirmjesecaEvidencija.getValue().getYear();
+
+            for (EvidencijaPodaci pod: trazeni.listaEvidencija) {
+                if (pod.Datumevidencija.getMonthValue() == mjesecBroj && pod.Datumevidencija.getYear()== godinaBroj) EvidencijaPosljednjiMjesec.add(pod);
+            }
+            tableEvidencija.setItems(EvidencijaPosljednjiMjesec);
+        }
+    }
+
+
+
+
+
     @FXML
     private void TablicaEvidencijaUnos(ActionEvent event){
         if ( DatumEvidencija.getValue() == null || OpcijaEvidecija.getText().equalsIgnoreCase("")){
@@ -559,7 +588,7 @@ public class Controller{
         String odabraniZaposlenikString = textFieldImePrezimeZaposlenika.getText();
         Zaposlenik trazeni = listaZaposlenika.stream()
                 .filter(Zaposlenik -> odabraniZaposlenikString.equalsIgnoreCase(Zaposlenik.getImePrezimeZaposlenika())).findAny().orElse(null);
-            if (EvidencijaTrenutacnalista.isEmpty()) {  // ispis poruke ako nema ni jedno putovanje za odabrani mjesec
+            if (trazeni.listaEvidencija.isEmpty()) {  // ispis poruke ako nema ni jedno putovanje za odabrani mjesec
                 Alert alert= new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Upozorenje");
                 alert.setHeaderText("Ne postoji ni jedno putovanje za odabrani mjesec");
@@ -591,7 +620,7 @@ public class Controller{
                     tablicaPDF.addCell("Potpis");
 
 
-                    for (EvidencijaPodaci pod : EvidencijaTrenutacnalista){
+                    for (EvidencijaPodaci pod : trazeni.listaEvidencija){
 
                         Integer dan = pod.getDatumevidencija().getDayOfMonth();
                         tablicaPDF.addCell(dan.toString() + ".");
@@ -625,7 +654,6 @@ public class Controller{
         }
         else {
             trazeni.listaEvidencija.remove(selektiranoPutovanje);
-            EvidencijaTrenutacnalista.remove(selektiranoPutovanje);
             datePickerFiltriranje();
         }
     }
