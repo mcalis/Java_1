@@ -620,7 +620,7 @@ public class Controller{
                     tablicaPDF.addCell("Potpis");
 
 
-                    for (EvidencijaPodaci pod : trazeni.listaEvidencija){
+                    for (EvidencijaPodaci pod : EvidencijaPosljednjiMjesec){
 
                         Integer dan = pod.getDatumevidencija().getDayOfMonth();
                         tablicaPDF.addCell(dan.toString() + ".");
